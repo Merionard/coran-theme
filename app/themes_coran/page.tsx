@@ -1,8 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { PrismaClient } from "@prisma/client";
-
+import { prisma } from "@/prisma/client";
+import Link from "next/link";
 export default async function Page() {
-  const prisma = new PrismaClient();
   const Themes = await prisma.theme.findMany();
 
   return (
@@ -10,7 +9,9 @@ export default async function Page() {
       <CardContent>
         <ul>
           {Themes.map((t) => (
-            <li key={t.id}>{t.name}</li>
+            <li key={t.id}>
+              <Link href={`/themes_coran/${t.id}`}>{t.name}</Link>
+            </li>
           ))}
         </ul>
       </CardContent>

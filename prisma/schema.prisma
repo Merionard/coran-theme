@@ -1,5 +1,3 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,7 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id    Int     @id @default(autoincrement())
   email String  @unique
@@ -17,20 +14,34 @@ model User {
 }
 
 model Theme {
-  id        Int      @id @default(autoincrement())
+  id        Int     @id @default(autoincrement())
   name      String
-  parent    Theme?   @relation("ParentTheme", fields: [parentId], references: [id])
   parentId  Int?
-  subThemes Theme[]  @relation("ParentTheme")
   ayats     Ayat[]
+  parent    Theme?  @relation("ParentTheme", fields: [parentId], references: [id])
+  subThemes Theme[] @relation("ParentTheme")
 }
 
 model Ayat {
-  id        Int      @id @default(autoincrement())
-  sourate   Int
-  verset    Int
-  theme     Theme   @relation(fields:[themeId],references:[id])
-  themeId   Int
-  content   String
-  traduction  String
+  id         Int    @id @default(autoincrement())
+  sourate    Int
+  verset     Int
+  themeId    Int
+  content    String
+  traduction String
+  theme      Theme  @relation(fields: [themeId], references: [id])
+}
+
+model quran {
+  surah      Int?
+  ayah       Int?
+  ayah_text  String?
+  hizb       Float?  @db.Real
+  page       Int?
+  pagehindi  String?
+  index      Int
+  surrahname String?
+  chapter    Int?
+  sajdah     Int?
+  id         Int     @id @default(autoincrement())
 }
