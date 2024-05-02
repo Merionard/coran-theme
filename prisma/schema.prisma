@@ -1,0 +1,36 @@
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id    Int     @id @default(autoincrement())
+  email String  @unique
+  name  String?
+}
+
+model Theme {
+  id        Int      @id @default(autoincrement())
+  name      String
+  parent    Theme?   @relation("ParentTheme", fields: [parentId], references: [id])
+  parentId  Int?
+  subThemes Theme[]  @relation("ParentTheme")
+  ayats     Ayat[]
+}
+
+model Ayat {
+  id        Int      @id @default(autoincrement())
+  sourate   Int
+  verset    Int
+  theme     Theme   @relation(fields:[themeId],references:[id])
+  themeId   Int
+  content   String
+  traduction  String
+}
