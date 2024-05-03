@@ -33,15 +33,16 @@ model Ayat {
 }
 
 model quran {
-  surah      Int?
-  ayah       Int?
-  ayah_text  String?
+  surah      Int
+  ayah       Int
+  ayah_text  String
   hizb       Float?  @db.Real
-  page       Int?
-  pagehindi  String?
+  page       Int
+  pagehindi  String
   index      Int
-  surrahname String?
-  chapter    Int?
-  sajdah     Int?
+  surrahname String
+  chapter    Int
+  sajdah     Int
   id         Int     @id @default(autoincrement())
+  traduction String
 }
