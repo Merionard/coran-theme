@@ -44,4 +44,5 @@ model quran {
   chapter    Int?
   sajdah     Int?
   id         Int     @id @default(autoincrement())
+  traduction String
 }
