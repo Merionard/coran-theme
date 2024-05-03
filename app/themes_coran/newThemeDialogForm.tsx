@@ -1,29 +1,20 @@
 "use client"
 
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { createNewThemeCoran } from "./themeCoranAction"
-import { toast } from "sonner"
 import {
     Dialog,
-    DialogClose,
     DialogContent,
-    DialogDescription,
     DialogHeader,
-    DialogTitle,
-    DialogTrigger,
+    DialogTitle
 } from "@/components/ui/dialog"
-import { useState } from "react"
-import { Close } from "@radix-ui/react-dialog"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
-
-
-
-
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { z } from "zod"
 
 const formSchema = z.object({
     themeName: z.string()
@@ -31,7 +22,16 @@ const formSchema = z.object({
         .max(70, "Maximum 70 caractères")
 })
 
-export function NewThemeDialogForm() {
+type Props = {
+    onSubmitForm: (themeName: string, themeId?: number) => Promise<{
+        id: number;
+        name: string;
+        parentId: number | null;
+    } | null>
+    parentId?: number
+}
+
+export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
 
     const [openModal, setOpenModal] = useState(false)
     const router = useRouter()
@@ -45,7 +45,7 @@ export function NewThemeDialogForm() {
 
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const newTheme = await createNewThemeCoran(values.themeName);
+        const newTheme = await onSubmitForm(values.themeName, parentId);
         if (newTheme === null) {
             form.setError("themeName", { type: "custom", message: "Ce thème existe déjà!" })
             return;

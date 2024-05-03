@@ -1,37 +1,15 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/prisma/client";
 import Link from "next/link";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { useForm } from "react-hook-form";
 import { NewThemeDialogForm } from "./newThemeDialogForm";
+import { createNewThemeCoran } from "./themeCoranAction";
 
 export default async function Page() {
-  const Themes = await prisma.theme.findMany();
-  async function createTheme(formData: FormData) {
-    'use server'
-
-    const rawFormData = {
-      newTheme: formData.get('newTheme'),
-    }
-
-
-    console.log(rawFormData)
-  }
-
+  const Themes = await prisma.theme.findMany({ where: { parent: null } });
 
   return (
     <div>
-      <NewThemeDialogForm />
+      <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
 
       <Card className="mt-5">
         <CardContent>
