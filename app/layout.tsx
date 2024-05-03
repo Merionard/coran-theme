@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { Navbar } from "@/components/layout/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar />
         <main className="container mt-20">{children}</main>
+        <Toaster />
       </body>
     </html>
   );
