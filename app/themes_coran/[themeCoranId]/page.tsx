@@ -9,11 +9,9 @@ export default async function ViewTheme({
 }: {
   params: { themeCoranId: string };
 }) {
-
-
   const theme = await prisma.theme.findUnique({
     where: { id: Number(params.themeCoranId) },
-    include: { ayats: true, subThemes: true },
+    include: { ayats: { include: { sourate: true } }, subThemes: true },
   });
 
   const getContent = () => {
@@ -23,7 +21,7 @@ export default async function ViewTheme({
         <div key={subTheme.id} className="p-5 border mb-3">
           <Link href={`/themes_coran/${subTheme.id}`}>{subTheme.name}</Link>
         </div>
-      ))
+      ));
     }
     //si pas de sous thèmes
     return (
@@ -32,18 +30,21 @@ export default async function ViewTheme({
         {theme?.ayats.map((a) => (
           <div key={a.id} className="p-5 border mb-3">
             <h3 className="text-xl font-bold">
-              Sourate {a.sourate} verset {a.verset}
+              Sourate {a.sourate.titre} verset {a.content}
             </h3>
             <p className="text-right text-3xl">{a.content}</p>
-          </div>)
-        )
-        }
-      </div>)
-  }
+          </div>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
-      <NewThemeDialogForm onSubmitForm={createNewThemeCoran} parentId={Number(params.themeCoranId)} />
+      <NewThemeDialogForm
+        onSubmitForm={createNewThemeCoran}
+        parentId={Number(params.themeCoranId)}
+      />
       <h2 className="text-center text-6xl mb-16">{theme?.name}</h2>
       {getContent()}
     </div>

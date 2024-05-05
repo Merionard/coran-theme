@@ -7,24 +7,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { SourateWhithAyat } from "./ThemeSearchAyat";
 
 type props = {
-  ayatsBySourates: Array<{
-    surahLabel: string;
-    sourateNumber: number | null;
-    ayahs: { number: number | null }[];
-  }>;
+  sourateWhithAyat: SourateWhithAyat[];
 };
 
-export const SelectAyat = ({ ayatsBySourates }: props) => {
+export const SelectAyat = ({ sourateWhithAyat }: props) => {
   const [sourateSelected, setSourateSelected] = useState<number | null>(null);
 
-  const ayatsBySourate = ayatsBySourates
-    .find((a) => a.sourateNumber === sourateSelected)
-    ?.ayahs.filter((a) => a.number !== null)
-    // @ts-ignore
-    .sort((a, b) => a.number - b.number);
-  const ayats = ayatsBySourate ? ayatsBySourate.sort() : [];
+  console.log(sourateWhithAyat);
 
   return (
     <div className="flex gap-2">
@@ -33,13 +25,13 @@ export const SelectAyat = ({ ayatsBySourates }: props) => {
           <SelectValue placeholder="Sourate" />
         </SelectTrigger>
         <SelectContent>
-          {ayatsBySourates.map((s) => (
+          {sourateWhithAyat.map((s) => (
             <SelectItem
-              value={s.sourateNumber != null ? s.sourateNumber.toString() : ""}
-              key={s.sourateNumber}
+              value={s.number.toString()}
+              key={s.number}
               className="text-3xl"
             >
-              {s.surahLabel}
+              {s.titre}
             </SelectItem>
           ))}
         </SelectContent>
@@ -49,14 +41,15 @@ export const SelectAyat = ({ ayatsBySourates }: props) => {
           <SelectValue placeholder="Ayat" />
         </SelectTrigger>
         <SelectContent>
-          {ayats.map((a) => (
-            <SelectItem
-              key={a.number}
-              value={a.number == null ? "" : a.number.toString()}
-            >
-              {a.number}
-            </SelectItem>
-          ))}
+          {sourateWhithAyat
+            .filter((s) => s.number === sourateSelected)
+            .map((s) => s.ayats)
+            .flatMap((a) => a)
+            .map((a) => (
+              <SelectItem key={a.number} value={a.number.toString()}>
+                {a.number}
+              </SelectItem>
+            ))}
         </SelectContent>
       </Select>
     </div>
