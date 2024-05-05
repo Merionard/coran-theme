@@ -7,30 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id    Int     @id @default(autoincrement())
   email String  @unique
   name  String?
 }
 
-model Theme {
+model theme {
   id        Int     @id @default(autoincrement())
   name      String
   parentId  Int?
-  ayats     Ayat[]
-  parent    Theme?  @relation("ParentTheme", fields: [parentId], references: [id])
-  subThemes Theme[] @relation("ParentTheme")
+  ayats     ayat[]
+  parent    theme?  @relation("ParentTheme", fields: [parentId], references: [id])
+  subThemes theme[] @relation("ParentTheme")
 }
 
-model Ayat {
-  id         Int    @id @default(autoincrement())
-  sourate    Int
-  verset     Int
-  themeId    Int
-  content    String
-  traduction String
-  theme      Theme  @relation(fields: [themeId], references: [id])
+model sourate {
+  number Int @id
+  titre String
+  ayats ayat[]
 }
+
+model ayat {
+  id         Int    @id @default(autoincrement())
+  sourate_number    Int 
+  sourate sourate @relation(fields:[sourate_number],references:[number])
+  number     Int
+  themeId    Int?
+  content    String
+  traduction String?
+  theme      theme?  @relation(fields: [themeId], references: [id])
+}
+
+
 
 model quran {
   surah      Int
