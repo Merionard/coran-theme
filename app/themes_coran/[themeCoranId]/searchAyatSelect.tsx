@@ -29,7 +29,7 @@ export const SelectAyat = ({ ayatsBySourates }: props) => {
   return (
     <div className="flex gap-2">
       <Select onValueChange={(value) => setSourateSelected(Number(value))}>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className=" text-3xl">
           <SelectValue placeholder="Sourate" />
         </SelectTrigger>
         <SelectContent>
@@ -37,6 +37,7 @@ export const SelectAyat = ({ ayatsBySourates }: props) => {
             <SelectItem
               value={s.sourateNumber != null ? s.sourateNumber.toString() : ""}
               key={s.sourateNumber}
+              className="text-3xl"
             >
               {s.surahLabel}
             </SelectItem>
@@ -44,7 +45,7 @@ export const SelectAyat = ({ ayatsBySourates }: props) => {
         </SelectContent>
       </Select>
       <Select>
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="">
           <SelectValue placeholder="Ayat" />
         </SelectTrigger>
         <SelectContent>
