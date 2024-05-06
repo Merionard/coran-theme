@@ -3,6 +3,8 @@ import { prisma } from "@/prisma/client";
 import Link from "next/link";
 import { NewThemeDialogForm } from "../../components/clientComponents/theme/newThemeDialogForm";
 import { createNewThemeCoran } from "../../components/serverActions/themeCoranAction";
+import { Pencil } from "lucide-react";
+import { ThemeItem } from "@/components/clientComponents/theme/themeItem";
 
 export default async function Page() {
   const Themes = await prisma.theme.findMany({ where: { parent: null } });
@@ -15,9 +17,7 @@ export default async function Page() {
         <CardContent>
           <ul>
             {Themes.map((t) => (
-              <li key={t.id}>
-                <Link href={`/themes_coran/${t.id}`}>{t.name}</Link>
-              </li>
+              <ThemeItem theme={t} key={t.id} />
             ))}
           </ul>
         </CardContent>

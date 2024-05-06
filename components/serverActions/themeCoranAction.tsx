@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@/prisma/client";
-import { theme } from "@prisma/client";
 
 export const createNewThemeCoran = async (
   themeName: string,
@@ -45,6 +44,15 @@ export const removeAyatOnTheme = async (themeId: number, ayatId: number) => {
       ayats: {
         disconnect: { id: ayatId },
       },
+    },
+  });
+};
+
+export const updateThemeName = async (themeId: number, name: string) => {
+  return await prisma.theme.update({
+    where: { id: themeId },
+    data: {
+      name: name,
     },
   });
 };

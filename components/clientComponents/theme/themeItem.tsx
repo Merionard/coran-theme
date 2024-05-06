@@ -1,0 +1,43 @@
+"use client";
+import { updateThemeName } from "@/components/serverActions/themeCoranAction";
+import { Input } from "@/components/ui/input";
+import { theme } from "@prisma/client";
+import { Check, Cross, Pencil, X } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export const ThemeItem = (props: { theme: theme }) => {
+  const [editMode, setEditMode] = useState(false);
+  const [themeName, setThemeName] = useState(props.theme.name);
+
+  const router = useRouter();
+
+  const updateName = async () => {
+    await updateThemeName(props.theme.id, themeName);
+    setEditMode(false);
+    router.refresh();
+  };
+
+  return (
+    <li key={props.theme.id} className="flex gap-3 items-center">
+      {editMode ? (
+        <Input
+          value={themeName}
+          onChange={(e) => setThemeName(e.target.value)}
+          className="w-44 my-2"
+        />
+      ) : (
+        <Link href={`/themes_coran/${props.theme.id}`}>{props.theme.name}</Link>
+      )}
+      {editMode ? (
+        <div className="flex gap-2">
+          <Check className="w-4 " onClick={updateName} />
+          <X className="w-4" onClick={() => setEditMode(false)} />
+        </div>
+      ) : (
+        <Pencil className="w-4 " onClick={() => setEditMode((prev) => !prev)} />
+      )}
+    </li>
+  );
+};

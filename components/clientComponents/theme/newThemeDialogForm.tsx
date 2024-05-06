@@ -70,7 +70,7 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <Button onClick={() => setOpenModal((prev) => !prev)}>
-        + Ajouter Thème
+        + Nouveau Thème
       </Button>
       <DialogContent>
         <DialogHeader>

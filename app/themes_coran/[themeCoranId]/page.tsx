@@ -42,11 +42,14 @@ export default async function ViewTheme({
 
   return (
     <div>
-      <NewThemeDialogForm
-        onSubmitForm={createNewThemeCoran}
-        parentId={Number(params.themeCoranId)}
-      />
-      <h2 className="text-center text-6xl mb-16">{theme?.name}</h2>
+      <div className="flex justify-between items-baseline mb-5">
+        <h2 className="text-6xl">{theme?.name}</h2>
+
+        <NewThemeDialogForm
+          onSubmitForm={createNewThemeCoran}
+          parentId={Number(params.themeCoranId)}
+        />
+      </div>
       {getContent()}
     </div>
   );

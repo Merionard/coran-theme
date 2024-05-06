@@ -1,10 +1,16 @@
 "use client";
 
 import { removeAyatOnTheme } from "@/components/serverActions/themeCoranAction";
-import { Prisma, ayat } from "@prisma/client";
+import { ayat } from "@prisma/client";
 import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export const AyatCard = (props: {
   ayat: ayat;
@@ -23,8 +29,8 @@ export const AyatCard = (props: {
     <div className="p-5 border mb-3">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-xl font-bold">
-          Sourate {props.ayat.sourate_number} verset {props.ayat.number}:{" "}
-          {props.titreSourate}
+          Sourate {props.ayat.sourate_number} verset {props.ayat.number}{" "}
+          <span>{props.titreSourate}</span>
         </h3>
         <button
           className="flex justify-center items-center rounded-full border p-2 hover:bg-red-500"
@@ -33,7 +39,16 @@ export const AyatCard = (props: {
           <Trash className="h-4 w-4" />
         </button>
       </div>
-      <p className="text-right text-3xl">{props.ayat.content}</p>
+      <Accordion type="single" collapsible>
+        <AccordionItem value="item-1">
+          <AccordionTrigger className=" text-3xl">
+            {props.ayat.content}
+          </AccordionTrigger>
+          <AccordionContent className="text-lg">
+            {props.ayat.traduction}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </div>
   );
 };
