@@ -1,8 +1,9 @@
 import { prisma } from "@/prisma/client";
-import { NewThemeDialogForm } from "../newThemeDialogForm";
-import { createNewThemeCoran } from "../themeCoranAction";
+import { NewThemeDialogForm } from "../../../components/clientComponents/theme/newThemeDialogForm";
+import { createNewThemeCoran } from "../../../components/serverActions/themeCoranAction";
 import Link from "next/link";
-import ThemeSearchAyat from "./ThemeSearchAyat";
+import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
+import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
 
 export default async function ViewTheme({
   params,
@@ -26,14 +27,14 @@ export default async function ViewTheme({
     //si pas de sous thèmes
     return (
       <div>
-        <ThemeSearchAyat />
+        <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
         {theme?.ayats.map((a) => (
-          <div key={a.id} className="p-5 border mb-3">
-            <h3 className="text-xl font-bold">
-              Sourate {a.sourate.titre} verset {a.content}
-            </h3>
-            <p className="text-right text-3xl">{a.content}</p>
-          </div>
+          <AyatCard
+            key={a.id}
+            ayat={a}
+            titreSourate={a.sourate.titre}
+            themeId={theme.id}
+          />
         ))}
       </div>
     );

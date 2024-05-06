@@ -1,6 +1,6 @@
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
-import { SelectAyat } from "./searchAyatSelect";
+import { SelectAyat } from "../clientComponents/ayat/searchAyatSelect";
 
 export const sourateWhithAyat = Prisma.validator<Prisma.sourateDefaultArgs>()({
   include: {
@@ -11,7 +11,7 @@ export type SourateWhithAyat = Prisma.sourateGetPayload<
   typeof sourateWhithAyat
 >;
 
-export default async function ThemeSearchAyat() {
+export default async function ThemeSearchAyat(props: { themeId: number }) {
   const souratesWhithAyats = await prisma.sourate.findMany({
     include: {
       ayats: {
@@ -32,7 +32,10 @@ export default async function ThemeSearchAyat() {
 
   return (
     <div>
-      <SelectAyat sourateWhithAyat={souratesWhithAyats} />
+      <SelectAyat
+        sourateWhithAyat={souratesWhithAyats}
+        themeId={props.themeId}
+      />
     </div>
   );
 }

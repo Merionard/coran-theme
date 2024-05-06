@@ -1,8 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/prisma/client";
 import Link from "next/link";
-import { NewThemeDialogForm } from "./newThemeDialogForm";
-import { createNewThemeCoran } from "./themeCoranAction";
+import { NewThemeDialogForm } from "../../components/clientComponents/theme/newThemeDialogForm";
+import { createNewThemeCoran } from "../../components/serverActions/themeCoranAction";
 
 export default async function Page() {
   const Themes = await prisma.theme.findMany({ where: { parent: null } });

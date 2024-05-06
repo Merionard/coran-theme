@@ -7,16 +7,29 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import { SourateWhithAyat } from "./ThemeSearchAyat";
+import { SourateWhithAyat } from "../../serverComponents/ThemeSearchAyat";
+import { Button } from "@/components/ui/button";
+import { addAyatOnTheme } from "../../serverActions/themeCoranAction";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type props = {
   sourateWhithAyat: SourateWhithAyat[];
+  themeId: number;
 };
 
-export const SelectAyat = ({ sourateWhithAyat }: props) => {
+export const SelectAyat = ({ sourateWhithAyat, themeId }: props) => {
   const [sourateSelected, setSourateSelected] = useState<number | null>(null);
+  const [selectedAyatId, setSelectedAyatId] = useState<number | null>(null);
+  const router = useRouter();
 
-  console.log(sourateWhithAyat);
+  const AddAyat = async () => {
+    const updatedAyat = await addAyatOnTheme(themeId, Number(selectedAyatId));
+    if (updatedAyat) {
+      toast.success("Ayat rajoutée avec succès!");
+      router.refresh();
+    }
+  };
 
   return (
     <div className="flex gap-2">
@@ -31,12 +44,12 @@ export const SelectAyat = ({ sourateWhithAyat }: props) => {
               key={s.number}
               className="text-3xl"
             >
-              {s.titre}
+              {s.titre} ({s.number})
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      <Select>
+      <Select onValueChange={(ayat) => setSelectedAyatId(Number(ayat))}>
         <SelectTrigger className="">
           <SelectValue placeholder="Ayat" />
         </SelectTrigger>
@@ -46,12 +59,13 @@ export const SelectAyat = ({ sourateWhithAyat }: props) => {
             .map((s) => s.ayats)
             .flatMap((a) => a)
             .map((a) => (
-              <SelectItem key={a.number} value={a.number.toString()}>
+              <SelectItem key={a.number} value={a.id.toString()}>
                 {a.number}
               </SelectItem>
             ))}
         </SelectContent>
       </Select>
+      <Button onClick={AddAyat}>Ajouter au thème</Button>
     </div>
   );
 };
