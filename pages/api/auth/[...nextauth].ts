@@ -1,12 +1,14 @@
 import { prisma } from "@/prisma/client";
-import { PrismaClient, Prisma } from "@prisma/client";
+
 import { DefaultArgs } from "@prisma/client/runtime/library";
+import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import NextAuth, { AuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
 export const authOptions: AuthOptions = {
   // Configure one or more authentication providers
+  //@ts-ignore
   adapter: PrismaAdapter(prisma),
   providers: [
     GoogleProvider({
@@ -36,8 +38,3 @@ export const authOptions: AuthOptions = {
 };
 
 export default NextAuth(authOptions);
-function PrismaAdapter(
-  prisma: PrismaClient<Prisma.PrismaClientOptions, never, DefaultArgs>
-): import("next-auth/adapters").Adapter | undefined {
-  throw new Error("Function not implemented.");
-}

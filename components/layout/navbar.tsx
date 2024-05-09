@@ -3,6 +3,7 @@
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { AuthentBtn } from "../clientComponents/auth/authentBtn";
 
 export const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -30,6 +31,7 @@ export const Navbar = () => {
             {l.name}
           </Link>
         ))}
+        <AuthentBtn />
       </div>
       <div></div>
       <div className="flex items-center md:hidden">
