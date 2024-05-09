@@ -4,6 +4,8 @@ import { Prisma } from "@prisma/client";
 import { NewThemeDialogForm } from "../../components/clientComponents/theme/newThemeDialogForm";
 import { createNewThemeCoran } from "../../components/serverActions/themeCoranAction";
 import Link from "next/link";
+import { ThemeItem } from "@/components/clientComponents/theme/themeItem";
+import { ListThemes } from "@/components/clientComponents/theme/listThemes";
 
 export const themeWithSubThemes =
   Prisma.validator<Prisma.theme$subThemesArgs>()({
@@ -17,37 +19,29 @@ export type ThemeWithSubThemes = Prisma.themeGetPayload<
 
 export default async function Page() {
   const themes = await prisma.theme.findMany({
-    where: { parentId: null },
     include: { subThemes: true },
   });
 
-  const test = async (theme: ThemeWithSubThemes, subLevel: number) => {
+  const getAllThemesWithRecursiveSubThemes = (
+    theme: ThemeWithSubThemes,
+    subLevel: number
+  ) => {
     if (theme.subThemes.length > 0) {
-      const subThemes = await prisma.theme.findMany({
-        where: { parentId: theme.id },
-        include: { subThemes: true },
-      });
+      const subThemes = themes.filter((t) => t.parentId === theme.id);
       const className = "ml-" + subLevel + " pl-4";
       return (
         <div className={className}>
-          <Link
-            href={`/themes_coran/${theme.id}`}
-            className={theme.parentId === null ? "font-bold text-xl" : ""}
-          >
-            {theme.name}
-          </Link>
-          {subThemes.map((s) => test(s, subLevel + 2))}
+          <ThemeItem theme={{ ...theme }} />
+
+          {subThemes.map((s) =>
+            getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
+          )}
         </div>
       );
     } else {
       return (
         <div className={`ml-${subLevel} pl-4`}>
-          <Link
-            href={`/themes_coran/${theme.id}`}
-            className={theme.parentId === null ? "font-bold text-xl" : ""}
-          >
-            {theme.name}
-          </Link>
+          <ThemeItem theme={{ ...theme }} />
         </div>
       );
     }
@@ -57,9 +51,7 @@ export default async function Page() {
     <div>
       <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
 
-      <Card className="mt-5">
-        <CardContent>{themes.map((t) => test(t, 0))}</CardContent>
-      </Card>
+      <ListThemes themes={themes} />
     </div>
   );
 }

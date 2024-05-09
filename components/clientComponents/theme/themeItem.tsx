@@ -28,7 +28,12 @@ export const ThemeItem = (props: { theme: theme }) => {
           className="w-44 my-2"
         />
       ) : (
-        <Link href={`/themes_coran/${props.theme.id}`}>{props.theme.name}</Link>
+        <Link
+          href={`/themes_coran/${props.theme.id}`}
+          className={props.theme.parentId === null ? "font-bold text-xl" : ""}
+        >
+          {props.theme.name}
+        </Link>
       )}
       {editMode ? (
         <div className="flex gap-2">
