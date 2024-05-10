@@ -18,7 +18,7 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
       const subThemes = props.themes.filter((t) => t.parentId === theme.id);
       const className = "ml-" + subLevel + " pl-4";
       return (
-        <div className={className}>
+        <div className={className} key={theme.id}>
           <ThemeItem theme={{ ...theme }} />
 
           {subThemes.map((s) =>
@@ -28,7 +28,7 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
       );
     } else {
       return (
-        <div className={`ml-${subLevel} pl-4`}>
+        <div className={`ml-${subLevel} pl-4`} key={theme.id}>
           <ThemeItem theme={{ ...theme }} />
         </div>
       );

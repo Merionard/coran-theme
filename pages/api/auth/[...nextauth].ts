@@ -1,6 +1,5 @@
 import { prisma } from "@/prisma/client";
 
-import { DefaultArgs } from "@prisma/client/runtime/library";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import NextAuth, { AuthOptions } from "next-auth";
@@ -19,20 +18,14 @@ export const authOptions: AuthOptions = {
   ],
   secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
-    async session({ session, user }) {
+    async session({ session, token, user }) {
       if (session.user) {
         session.user.id = user.id;
         session.user.name = user.name;
+        //@ts-ignore
+        session.user.role = user.role;
       }
       return session;
-    },
-    async redirect({ url, baseUrl }) {
-      console.log("url", url);
-      console.log("baseUrl", baseUrl);
-
-      if (url.endsWith("/")) return baseUrl + "/MyAE/home";
-
-      return url.startsWith(baseUrl) ? url : baseUrl;
     },
   },
 };

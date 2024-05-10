@@ -20,7 +20,7 @@ export const ThemeItem = (props: { theme: theme }) => {
   };
 
   return (
-    <li key={props.theme.id} className="flex gap-3 items-center">
+    <li className="flex gap-3 items-center">
       {editMode ? (
         <Input
           value={themeName}

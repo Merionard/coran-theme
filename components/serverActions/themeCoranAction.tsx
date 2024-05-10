@@ -1,11 +1,17 @@
 "use server";
 
+import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
 
 export const createNewThemeCoran = async (
   themeName: string,
   parentId?: number
 ) => {
+  const session = await getAuthSession();
+
+  if (!session || session?.user.role !== "ADMIN") {
+    throw new Error("Vous devez être admin!");
+  }
   const theme = await prisma.theme.findFirst({ where: { name: themeName } });
 
   if (theme !== null) {
@@ -27,6 +33,10 @@ export const createNewThemeCoran = async (
 };
 
 export const addAyatOnTheme = async (themeId: number, ayatId: number) => {
+  const session = await getAuthSession();
+  if (!session || session?.user.role !== "ADMIN") {
+    throw new Error("Vous devez être admin!");
+  }
   return await prisma.theme.update({
     where: { id: themeId },
     data: {
@@ -38,6 +48,10 @@ export const addAyatOnTheme = async (themeId: number, ayatId: number) => {
 };
 
 export const removeAyatOnTheme = async (themeId: number, ayatId: number) => {
+  const session = await getAuthSession();
+  if (!session || session?.user.role !== "ADMIN") {
+    throw new Error("Vous devez être admin!");
+  }
   return await prisma.theme.update({
     where: { id: themeId },
     data: {
@@ -49,6 +63,10 @@ export const removeAyatOnTheme = async (themeId: number, ayatId: number) => {
 };
 
 export const updateThemeName = async (themeId: number, name: string) => {
+  const session = await getAuthSession();
+  if (!session || session?.user.role !== "ADMIN") {
+    throw new Error("Vous devez être admin!");
+  }
   return await prisma.theme.update({
     where: { id: themeId },
     data: {

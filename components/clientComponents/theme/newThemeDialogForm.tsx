@@ -17,6 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -54,17 +56,24 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const newTheme = await onSubmitForm(values.themeName, parentId);
-    if (newTheme === null) {
-      form.setError("themeName", {
-        type: "custom",
-        message: "Ce thème existe déjà!",
-      });
-      return;
+    try {
+      const result = await onSubmitForm(values.themeName, parentId);
+      if (result === null) {
+        form.setError("themeName", {
+          type: "custom",
+          message: "Ce thème existe déjà!",
+        });
+        return;
+      }
+
+      toast.success(result.name + " créé avec succès!");
+      setOpenModal(false);
+      router.refresh();
+    } catch (error) {
+      setOpenModal(false);
+      //@ts-ignore
+      toast.error(error.message);
     }
-    toast.success(newTheme.name + " créé avec succès!");
-    setOpenModal(false);
-    router.refresh();
   }
 
   return (

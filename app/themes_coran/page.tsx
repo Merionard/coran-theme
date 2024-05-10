@@ -1,11 +1,10 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { ListThemes } from "@/components/clientComponents/theme/listThemes";
+import { ThemeItem } from "@/components/clientComponents/theme/themeItem";
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
 import { NewThemeDialogForm } from "../../components/clientComponents/theme/newThemeDialogForm";
 import { createNewThemeCoran } from "../../components/serverActions/themeCoranAction";
-import Link from "next/link";
-import { ThemeItem } from "@/components/clientComponents/theme/themeItem";
-import { ListThemes } from "@/components/clientComponents/theme/listThemes";
+import { getAuthSession } from "@/lib/auth";
 
 export const themeWithSubThemes =
   Prisma.validator<Prisma.theme$subThemesArgs>()({
@@ -22,34 +21,13 @@ export default async function Page() {
     include: { subThemes: true },
   });
 
-  const getAllThemesWithRecursiveSubThemes = (
-    theme: ThemeWithSubThemes,
-    subLevel: number
-  ) => {
-    if (theme.subThemes.length > 0) {
-      const subThemes = themes.filter((t) => t.parentId === theme.id);
-      const className = "ml-" + subLevel + " pl-4";
-      return (
-        <div className={className}>
-          <ThemeItem theme={{ ...theme }} />
-
-          {subThemes.map((s) =>
-            getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
-          )}
-        </div>
-      );
-    } else {
-      return (
-        <div className={`ml-${subLevel} pl-4`}>
-          <ThemeItem theme={{ ...theme }} />
-        </div>
-      );
-    }
-  };
+  const session = await getAuthSession();
 
   return (
     <div>
-      <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
+      {session && session.user.role === "ADMIN" && (
+        <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
+      )}
 
       <ListThemes themes={themes} />
     </div>
