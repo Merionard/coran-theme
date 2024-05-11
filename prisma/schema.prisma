@@ -21,10 +21,12 @@ model User {
   accounts      Account[]
   sessions      Session[]
   role UserRole @default(USER)
+  myAyats   ayat[] @relation("UserAyats")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model Account {
   userId            String
@@ -89,6 +91,7 @@ model ayat {
   content    String
   traduction String?
   theme      theme[]  @relation("AyatThemes")
+  users      User[] @relation("UserAyats")
 }
 
 

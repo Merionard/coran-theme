@@ -5,6 +5,7 @@ import Link from "next/link";
 import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
 import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
 import { getAuthSession } from "@/lib/auth";
+import { ayat } from "@prisma/client";
 
 export default async function ViewTheme({
   params,
@@ -17,6 +18,15 @@ export default async function ViewTheme({
   });
 
   const session = await getAuthSession();
+  const user = await prisma.user.findFirst({
+    where: { id: session?.user.id },
+    include: { myAyats: true },
+  });
+  const isAyatFavorite = (ayat: ayat) => {
+    if (!session) return false;
+    if (user) return user.myAyats.some((a) => a.id === ayat.id);
+    return false;
+  };
 
   const getContent = () => {
     if (theme?.subThemes && theme.subThemes.length > 0) {
@@ -39,6 +49,7 @@ export default async function ViewTheme({
             ayat={a}
             titreSourate={a.sourate.titre}
             themeId={theme.id}
+            isFavorite={isAyatFavorite(a)}
           />
         ))}
       </div>
