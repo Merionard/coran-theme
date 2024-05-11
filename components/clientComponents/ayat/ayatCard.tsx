@@ -20,9 +20,13 @@ export const AyatCard = (props: {
   const router = useRouter();
   const removeAyat = async () => {
     if (props.themeId) {
-      const removedAyat = await removeAyatOnTheme(props.themeId, props.ayat.id);
-      toast.success("Suppression effectuée avec succès!");
-      router.refresh();
+      try {
+        await removeAyatOnTheme(props.themeId, props.ayat.id);
+        toast.success("Suppression effectuée avec succès!");
+        router.refresh();
+      } catch (error: any) {
+        toast.error(error.message);
+      }
     }
   };
   return (

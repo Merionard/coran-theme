@@ -6,6 +6,7 @@ import { Check, Cross, Pencil, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const ThemeItem = (props: { theme: theme }) => {
   const [editMode, setEditMode] = useState(false);
@@ -14,9 +15,13 @@ export const ThemeItem = (props: { theme: theme }) => {
   const router = useRouter();
 
   const updateName = async () => {
-    await updateThemeName(props.theme.id, themeName);
-    setEditMode(false);
-    router.refresh();
+    try {
+      await updateThemeName(props.theme.id, themeName);
+      setEditMode(false);
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
   };
 
   return (

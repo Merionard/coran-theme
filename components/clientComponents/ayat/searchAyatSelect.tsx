@@ -24,10 +24,14 @@ export const SelectAyat = ({ sourateWhithAyat, themeId }: props) => {
   const router = useRouter();
 
   const AddAyat = async () => {
-    const updatedAyat = await addAyatOnTheme(themeId, Number(selectedAyatId));
-    if (updatedAyat) {
-      toast.success("Ayat rajoutée avec succès!");
-      router.refresh();
+    try {
+      const updatedAyat = await addAyatOnTheme(themeId, Number(selectedAyatId));
+      if (updatedAyat) {
+        toast.success("Ayat rajoutée avec succès!");
+        router.refresh();
+      }
+    } catch (error: any) {
+      toast.error(error.message);
     }
   };
 

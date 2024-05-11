@@ -4,6 +4,7 @@ import { createNewThemeCoran } from "../../../components/serverActions/themeCora
 import Link from "next/link";
 import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
 import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
+import { getAuthSession } from "@/lib/auth";
 
 export default async function ViewTheme({
   params,
@@ -14,6 +15,8 @@ export default async function ViewTheme({
     where: { id: Number(params.themeCoranId) },
     include: { ayats: { include: { sourate: true } }, subThemes: true },
   });
+
+  const session = await getAuthSession();
 
   const getContent = () => {
     if (theme?.subThemes && theme.subThemes.length > 0) {
@@ -27,7 +30,9 @@ export default async function ViewTheme({
     //si pas de sous thèmes
     return (
       <div>
-        <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+        {session && session.user.role === "ADMIN" && (
+          <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+        )}
         {theme?.ayats.map((a) => (
           <AyatCard
             key={a.id}
@@ -45,10 +50,12 @@ export default async function ViewTheme({
       <div className="flex justify-between items-baseline mb-5">
         <h2 className="text-6xl">{theme?.name}</h2>
 
-        <NewThemeDialogForm
-          onSubmitForm={createNewThemeCoran}
-          parentId={Number(params.themeCoranId)}
-        />
+        {session && session.user.role === "ADMIN" && (
+          <NewThemeDialogForm
+            onSubmitForm={createNewThemeCoran}
+            parentId={Number(params.themeCoranId)}
+          />
+        )}
       </div>
       {getContent()}
     </div>
