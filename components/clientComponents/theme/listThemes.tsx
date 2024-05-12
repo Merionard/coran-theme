@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { ArrowRight, Search } from "lucide-react";
+import { ArrowRight, Grid3X3, List, Search } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { ThemeCard } from "./themeCard";
 
 export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
   const [search, setSearch] = useState("");
@@ -33,30 +34,25 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
 
       if (gridMod && theme.parentId === null) {
         return (
-          <Card key={theme.id}>
-            <CardHeader>
-              <Link href={`/themes_coran/${theme.id}`}>
-                <CardTitle>{theme.name}</CardTitle>
-              </Link>
-              <CardDescription>
-                efefejfoeifjeofiejoefijefoeifjeofij
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Collapsible>
-                <CollapsibleTrigger asChild>
-                  <Button variant={"link"} className="p-0">
-                    Afficher sous thèmes
-                  </Button>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  {subThemes.map((s) =>
-                    getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
-                  )}
-                </CollapsibleContent>
-              </Collapsible>
-            </CardContent>
-          </Card>
+          <ThemeCard
+            key={theme.id}
+            id={theme.id}
+            name={theme.name}
+            parentId={theme.parentId}
+          >
+            <Collapsible>
+              <CollapsibleTrigger asChild>
+                <Button variant={"link"} className="p-0">
+                  Afficher sous thèmes
+                </Button>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                {subThemes.map((s) =>
+                  getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
+                )}
+              </CollapsibleContent>
+            </Collapsible>
+          </ThemeCard>
         );
       }
 
@@ -98,16 +94,12 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
     } else {
       if (gridMod && theme.parentId === null) {
         return (
-          <Link href={`/themes_coran/${theme.id}`}>
-            <Card key={theme.id}>
-              <CardHeader>
-                <CardTitle>{theme.name}</CardTitle>
-                <CardDescription>
-                  efefejfoeifjeofiejoefijefoeifjeofij
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
+          <ThemeCard
+            key={theme.id}
+            id={theme.id}
+            name={theme.name}
+            parentId={theme.parentId}
+          />
         );
       }
 
@@ -148,7 +140,27 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
     if (search !== "") {
       return props.themes
         .filter((t) => t.name.toUpperCase().includes(search.toUpperCase()))
-        .map((t) => <ThemeItem key={t.id} theme={{ ...t }} />);
+        .map((t) => {
+          if (gridMod)
+            return (
+              <ThemeCard
+                key={t.id}
+                name={t.name}
+                id={t.id}
+                parentId={t.parentId}
+              />
+            );
+          return (
+            <div key={t.id}>
+              <Link
+                href={`/themes_coran/${t.id}`}
+                className={t.parentId === null ? "font-bold text-xl" : ""}
+              >
+                {t.name}
+              </Link>
+            </div>
+          );
+        });
     }
     return props.themes
       .filter((t) => t.parentId === null)
@@ -156,7 +168,25 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
   };
   return (
     <div className="mt-5">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
+        <div className="flex">
+          <Button
+            variant={"outline"}
+            className={gridMod ? "rounded-none bg-secondary" : "rounded-none"}
+            onClick={() => setGridMode(true)}
+            size={"icon"}
+          >
+            <Grid3X3 />
+          </Button>
+          <Button
+            variant={"outline"}
+            onClick={() => setGridMode(false)}
+            className={gridMod ? "rounded-none" : "rounded-none bg-secondary"}
+            size={"icon"}
+          >
+            <List />
+          </Button>
+        </div>
         <div className="relative w-full  md:w-1/6">
           <Input
             value={search}
@@ -164,10 +194,6 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
             placeholder="Rechercher thème"
           />
           <Search className="h-6 w-6 absolute top-1/2  -translate-y-1/2 right-3 text-gray-400" />
-        </div>
-        <div className="flex">
-          <Button onClick={() => setGridMode(true)}>grid</Button>
-          <Button onClick={() => setGridMode(false)}>list</Button>
         </div>
       </div>
       <Card className="mt-5">
