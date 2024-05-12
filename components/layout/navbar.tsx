@@ -24,7 +24,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="h-20 bg-blue-200 p-5 flex justify-end tracking-widest">
+    <nav className="h-20 bg-background border-b-[1px] border-border p-5 flex justify-end tracking-widest">
       <div className="hidden md:flex items-center gap-5">
         {links.map((l) => (
           <Link key={l.name} href={l.url} className="cursor-pointer uppercase">
