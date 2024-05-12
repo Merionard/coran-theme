@@ -2,13 +2,27 @@
 
 import { ThemeWithSubThemes } from "@/app/themes_coran/page";
 import { ThemeItem } from "./themeItem";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
   const [search, setSearch] = useState("");
+  const [gridMod, setGridMode] = useState(false);
 
   const getAllThemesWithRecursiveSubThemes = (
     theme: ThemeWithSubThemes,
@@ -16,10 +30,65 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
   ) => {
     if (theme.subThemes.length > 0) {
       const subThemes = props.themes.filter((t) => t.parentId === theme.id);
-      const className = "ml-" + subLevel + " pl-4";
+
+      if (gridMod && theme.parentId === null) {
+        return (
+          <Card key={theme.id}>
+            <CardHeader>
+              <Link href={`/themes_coran/${theme.id}`}>
+                <CardTitle>{theme.name}</CardTitle>
+              </Link>
+              <CardDescription>
+                efefejfoeifjeofiejoefijefoeifjeofij
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Collapsible>
+                <CollapsibleTrigger asChild>
+                  <Button variant={"link"} className="p-0">
+                    Afficher sous thèmes
+                  </Button>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {subThemes.map((s) =>
+                    getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
+                  )}
+                </CollapsibleContent>
+              </Collapsible>
+            </CardContent>
+          </Card>
+        );
+      }
+
       return (
-        <div className={className} key={theme.id}>
-          <ThemeItem theme={{ ...theme }} />
+        <div
+          className={
+            gridMod
+              ? theme.parentId === null
+                ? "pl-0"
+                : "pl-3"
+              : theme.parentId === null
+              ? "pl-2"
+              : "pl-10"
+          }
+          key={theme.id}
+        >
+          <div className="flex gap-1 items-center">
+            {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
+
+            <Link
+              href={`/themes_coran/${theme.id}`}
+              className={
+                gridMod
+                  ? "text-base"
+                  : theme.parentId === null
+                  ? "font-bold text-2xl"
+                  : "text-xl"
+              }
+            >
+              {theme.name}
+            </Link>
+          </div>
 
           {subThemes.map((s) =>
             getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
@@ -27,9 +96,49 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
         </div>
       );
     } else {
+      if (gridMod && theme.parentId === null) {
+        return (
+          <Link href={`/themes_coran/${theme.id}`}>
+            <Card key={theme.id}>
+              <CardHeader>
+                <CardTitle>{theme.name}</CardTitle>
+                <CardDescription>
+                  efefejfoeifjeofiejoefijefoeifjeofij
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+        );
+      }
+
       return (
-        <div className={`ml-${subLevel} pl-4`} key={theme.id}>
-          <ThemeItem theme={{ ...theme }} />
+        <div
+          className={
+            gridMod
+              ? theme.parentId === null
+                ? "pl-0"
+                : "pl-3"
+              : theme.parentId === null
+              ? "pl-2"
+              : "pl-10"
+          }
+          key={theme.id}
+        >
+          <div className="flex gap-1 items-center">
+            {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
+            <Link
+              href={`/themes_coran/${theme.id}`}
+              className={
+                gridMod
+                  ? "text-base"
+                  : theme.parentId === null
+                  ? "font-bold text-2xl"
+                  : `text-xl`
+              }
+            >
+              {theme.name}
+            </Link>
+          </div>
         </div>
       );
     }
@@ -56,9 +165,24 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
           />
           <Search className="h-6 w-6 absolute top-1/2  -translate-y-1/2 right-3 text-gray-400" />
         </div>
+        <div className="flex">
+          <Button onClick={() => setGridMode(true)}>grid</Button>
+          <Button onClick={() => setGridMode(false)}>list</Button>
+        </div>
       </div>
       <Card className="mt-5">
-        <CardContent className="mt-5">{getThemes()}</CardContent>
+        <CardHeader>
+          <CardTitle className="text-5xl">
+            Arborescence des thèmes coraniques
+          </CardTitle>
+        </CardHeader>
+        {gridMod ? (
+          <CardContent>
+            <div className="grid grid-cols-4 gap-3">{getThemes()}</div>
+          </CardContent>
+        ) : (
+          <CardContent>{getThemes()}</CardContent>
+        )}
       </Card>
     </div>
   );

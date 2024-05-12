@@ -14,7 +14,13 @@ export default async function ViewTheme({
 }) {
   const theme = await prisma.theme.findUnique({
     where: { id: Number(params.themeCoranId) },
-    include: { ayats: { include: { sourate: true } }, subThemes: true },
+    include: {
+      ayats: {
+        include: { sourate: true },
+        orderBy: [{ sourate_number: "asc" }, { number: "asc" }],
+      },
+      subThemes: true,
+    },
   });
 
   const session = await getAuthSession();
