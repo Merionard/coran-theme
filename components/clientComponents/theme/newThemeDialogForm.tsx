@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Plus } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import { useRouter } from "next/navigation";
@@ -78,8 +79,12 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
 
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
-      <Button onClick={() => setOpenModal((prev) => !prev)}>
-        + Nouveau Thème
+      <Button
+        size={"icon"}
+        className="rounded-full"
+        onClick={() => setOpenModal((prev) => !prev)}
+      >
+        <Plus />
       </Button>
       <DialogContent>
         <DialogHeader>

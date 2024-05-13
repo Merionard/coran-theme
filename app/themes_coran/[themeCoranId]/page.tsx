@@ -6,6 +6,9 @@ import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAya
 import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
 import { getAuthSession } from "@/lib/auth";
 import { ayat } from "@prisma/client";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
 
 export default async function ViewTheme({
   params,
@@ -45,35 +48,47 @@ export default async function ViewTheme({
     }
     //si pas de sous thèmes
     return (
-      <div>
+      <Card>
         {session && session.user.role === "ADMIN" && (
-          <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+          <div className="m-auto w-3/4 my-16">
+            <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+          </div>
         )}
-        {theme?.ayats.map((a) => (
-          <AyatCard
-            key={a.id}
-            ayat={a}
-            titreSourate={a.sourate.titre}
-            themeId={theme.id}
-            isFavorite={isAyatFavorite(a)}
-          />
-        ))}
-      </div>
+        <CardContent>
+          {theme?.ayats.map((a) => (
+            <AyatCard
+              key={a.id}
+              ayat={a}
+              titreSourate={a.sourate.titre}
+              themeId={theme.id}
+              isFavorite={isAyatFavorite(a)}
+            />
+          ))}
+        </CardContent>
+      </Card>
     );
   };
 
   return (
     <div>
-      <div className="flex justify-between items-baseline mb-5">
-        <h2 className="text-6xl">{theme?.name}</h2>
+      <h2 className="text-6xl text-center">{theme?.name}</h2>
 
-        {session && session.user.role === "ADMIN" && (
+      {session && session.user.role === "ADMIN" && (
+        <div className="flex justify-end gap-2 mt-5 mb-2 ">
           <NewThemeDialogForm
             onSubmitForm={createNewThemeCoran}
             parentId={Number(params.themeCoranId)}
           />
-        )}
-      </div>
+          <Button
+            variant={"destructive"}
+            size={"icon"}
+            className="rounded-full"
+          >
+            <Trash />
+          </Button>
+        </div>
+      )}
+
       {getContent()}
     </div>
   );
