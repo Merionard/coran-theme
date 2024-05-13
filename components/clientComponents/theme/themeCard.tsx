@@ -17,7 +17,7 @@ export const ThemeCard = (props: PropsWithChildren<theme>) => {
         <Link href={`/themes_coran/${props.id}`}>
           <CardTitle>{props.name}</CardTitle>
         </Link>
-        <CardDescription>efefejfoeifjeofiejoefijefoeifjeofij</CardDescription>
+        <CardDescription>{props.description}</CardDescription>
       </CardHeader>
       <CardContent>{props.children}</CardContent>
     </Card>

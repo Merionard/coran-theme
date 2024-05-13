@@ -25,11 +25,10 @@ export default async function Page() {
 
   return (
     <div>
-      {session && session.user.role === "ADMIN" && (
-        <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
-      )}
-
-      <ListThemes themes={themes} />
+      <ListThemes
+        themes={themes}
+        admin={session !== null && session.user.role === "ADMIN"}
+      />
     </div>
   );
 }

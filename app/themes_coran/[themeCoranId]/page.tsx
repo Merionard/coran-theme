@@ -8,7 +8,7 @@ import { getAuthSession } from "@/lib/auth";
 import { ayat } from "@prisma/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
+import { Trash, Undo2 } from "lucide-react";
 
 export default async function ViewTheme({
   params,
@@ -75,6 +75,22 @@ export default async function ViewTheme({
 
       {session && session.user.role === "ADMIN" && (
         <div className="flex justify-end gap-2 mt-5 mb-2 ">
+          <Button
+            asChild
+            variant={"outline"}
+            size={"icon"}
+            className="rounded-full"
+          >
+            <Link
+              href={
+                theme?.parentId !== null
+                  ? `/themes_coran/${theme?.parentId}`
+                  : "/themes_coran/"
+              }
+            >
+              <Undo2 />
+            </Link>
+          </Button>
           <NewThemeDialogForm
             onSubmitForm={createNewThemeCoran}
             parentId={Number(params.themeCoranId)}
@@ -88,7 +104,6 @@ export default async function ViewTheme({
           </Button>
         </div>
       )}
-
       {getContent()}
     </div>
   );

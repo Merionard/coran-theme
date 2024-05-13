@@ -75,6 +75,7 @@ model theme {
   ayats     ayat[] @relation("AyatThemes")
   parent    theme?  @relation("ParentTheme", fields: [parentId], references: [id])
   subThemes theme[] @relation("ParentTheme")
+  description String?
 }
 
 model sourate {

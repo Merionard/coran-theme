@@ -20,8 +20,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ThemeCard } from "./themeCard";
+import { NewThemeDialogForm } from "./newThemeDialogForm";
+import { createNewThemeCoran } from "@/components/serverActions/themeCoranAction";
 
-export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
+export const ListThemes = (props: {
+  themes: ThemeWithSubThemes[];
+  admin: boolean;
+}) => {
   const [search, setSearch] = useState("");
   const [gridMod, setGridMode] = useState(false);
 
@@ -39,6 +44,7 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
             id={theme.id}
             name={theme.name}
             parentId={theme.parentId}
+            description={theme.description}
           >
             <Collapsible>
               <CollapsibleTrigger asChild>
@@ -99,6 +105,7 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
             id={theme.id}
             name={theme.name}
             parentId={theme.parentId}
+            description={theme.description}
           />
         );
       }
@@ -148,6 +155,7 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
                 name={t.name}
                 id={t.id}
                 parentId={t.parentId}
+                description={t.description}
               />
             );
           return (
@@ -167,33 +175,38 @@ export const ListThemes = (props: { themes: ThemeWithSubThemes[] }) => {
       .map((t) => getAllThemesWithRecursiveSubThemes(t, 0));
   };
   return (
-    <div className="mt-5">
-      <div className="flex justify-end gap-3">
-        <div className="flex">
-          <Button
-            variant={"outline"}
-            className={gridMod ? "rounded-none bg-secondary" : "rounded-none"}
-            onClick={() => setGridMode(true)}
-            size={"icon"}
-          >
-            <Grid3X3 />
-          </Button>
-          <Button
-            variant={"outline"}
-            onClick={() => setGridMode(false)}
-            className={gridMod ? "rounded-none" : "rounded-none bg-secondary"}
-            size={"icon"}
-          >
-            <List />
-          </Button>
-        </div>
-        <div className="relative w-full  md:w-1/6">
-          <Input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Rechercher thème"
-          />
-          <Search className="h-6 w-6 absolute top-1/2  -translate-y-1/2 right-3 text-gray-400" />
+    <div>
+      <div className="flex justify-between ">
+        {props.admin && (
+          <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
+        )}
+        <div className="flex gap-3">
+          <div className="flex">
+            <Button
+              variant={"outline"}
+              className={gridMod ? "rounded-none bg-secondary" : "rounded-none"}
+              onClick={() => setGridMode(true)}
+              size={"icon"}
+            >
+              <Grid3X3 />
+            </Button>
+            <Button
+              variant={"outline"}
+              onClick={() => setGridMode(false)}
+              className={gridMod ? "rounded-none" : "rounded-none bg-secondary"}
+              size={"icon"}
+            >
+              <List />
+            </Button>
+          </div>
+          <div className="relative w-full">
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher thème"
+            />
+            <Search className="h-6 w-6 absolute top-1/2  -translate-y-1/2 right-3 text-gray-400" />
+          </div>
         </div>
       </div>
       <Card className="mt-5">
