@@ -28,9 +28,8 @@ export default async function ViewTheme({
       subThemes: true,
     },
   });
-  const allParrentThemes = await prisma.theme.findMany({
-    where: { parentId: null },
-    select: { id: true },
+  const allOtherThemes = await prisma.theme.findMany({
+    where: { NOT: { id: Number(params.themeCoranId) } },
   });
 
   if (theme === null) {
@@ -106,6 +105,7 @@ export default async function ViewTheme({
             onSubmitForm={updateThemeName}
             parentId={Number(params.themeCoranId)}
             theme={theme}
+            parentThemes={allOtherThemes}
           />
           <ThemeDialogForm
             onSubmitForm={createNewThemeCoran}

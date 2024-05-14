@@ -10,15 +10,23 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { theme } from "@prisma/client";
-import { Pencil, Plus } from "lucide-react";
+import { Link, Pencil, Plus } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -40,10 +48,15 @@ type Props = {
   onSubmitForm: SubmitFunction<any[], theme | null>;
   parentId?: number;
   theme?: theme;
-  parentThemesId?: number[];
+  parentThemes?: theme[];
 };
 
-export function ThemeDialogForm({ onSubmitForm, parentId, theme }: Props) {
+export function ThemeDialogForm({
+  onSubmitForm,
+  parentId,
+  theme,
+  parentThemes,
+}: Props) {
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
 
@@ -56,10 +69,11 @@ export function ThemeDialogForm({ onSubmitForm, parentId, theme }: Props) {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
+      //si theme existe on le modifie si non création d'un nouveau theme
       const result =
         theme === undefined
           ? await onSubmitForm(values.themeName, parentId)
-          : await onSubmitForm(values.themeName, theme.id);
+          : await onSubmitForm(values.themeName, theme.id, values.themeParent);
       if (result === null) {
         form.setError("themeName", {
           type: "custom",
@@ -110,6 +124,33 @@ export function ThemeDialogForm({ onSubmitForm, parentId, theme }: Props) {
                 </FormItem>
               )}
             />
+            {theme && (
+              <FormField
+                control={form.control}
+                name="themeParent"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Rattacher à un thème</FormLabel>
+                    <Select onValueChange={(v) => field.onChange(Number(v))}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sélectionnez un thème" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {parentThemes?.map((p) => (
+                          <SelectItem key={p.id} value={p.id.toString()}>
+                            {p.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
             <div className="flex justify-end">
               <Button type="submit">Valider</Button>
             </div>

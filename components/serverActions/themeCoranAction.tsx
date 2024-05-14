@@ -62,15 +62,25 @@ export const removeAyatOnTheme = async (themeId: number, ayatId: number) => {
   });
 };
 
-export const updateThemeName = async (name: string, themeId: number) => {
+export const updateThemeName = async (
+  name: string,
+  themeId: number,
+  parentId?: number
+) => {
   const session = await getAuthSession();
   if (!session || session?.user.role !== "ADMIN") {
     throw new Error("Vous devez être admin!");
   }
+  const data = parentId
+    ? {
+        name: name,
+        parentId: parentId,
+      }
+    : {
+        name: name,
+      };
   return await prisma.theme.update({
     where: { id: themeId },
-    data: {
-      name: name,
-    },
+    data: data,
   });
 };
