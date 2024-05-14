@@ -1,6 +1,9 @@
 import { prisma } from "@/prisma/client";
-import { NewThemeDialogForm } from "../../../components/clientComponents/theme/newThemeDialogForm";
-import { createNewThemeCoran } from "../../../components/serverActions/themeCoranAction";
+import { ThemeDialogForm } from "../../../components/clientComponents/theme/newThemeDialogForm";
+import {
+  createNewThemeCoran,
+  updateThemeName,
+} from "../../../components/serverActions/themeCoranAction";
 import Link from "next/link";
 import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
 import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
@@ -8,7 +11,7 @@ import { getAuthSession } from "@/lib/auth";
 import { ayat } from "@prisma/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash, Undo2 } from "lucide-react";
+import { Pencil, Trash, Undo2 } from "lucide-react";
 
 export default async function ViewTheme({
   params,
@@ -25,6 +28,14 @@ export default async function ViewTheme({
       subThemes: true,
     },
   });
+  const allParrentThemes = await prisma.theme.findMany({
+    where: { parentId: null },
+    select: { id: true },
+  });
+
+  if (theme === null) {
+    throw new Error("Ce thème n'existe pas!");
+  }
 
   const session = await getAuthSession();
   const user = await prisma.user.findFirst({
@@ -91,7 +102,12 @@ export default async function ViewTheme({
               <Undo2 />
             </Link>
           </Button>
-          <NewThemeDialogForm
+          <ThemeDialogForm
+            onSubmitForm={updateThemeName}
+            parentId={Number(params.themeCoranId)}
+            theme={theme}
+          />
+          <ThemeDialogForm
             onSubmitForm={createNewThemeCoran}
             parentId={Number(params.themeCoranId)}
           />

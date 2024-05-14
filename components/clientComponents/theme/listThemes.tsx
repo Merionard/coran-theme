@@ -20,7 +20,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { ThemeCard } from "./themeCard";
-import { NewThemeDialogForm } from "./newThemeDialogForm";
+import { ThemeDialogForm } from "./newThemeDialogForm";
 import { createNewThemeCoran } from "@/components/serverActions/themeCoranAction";
 
 export const ListThemes = (props: {
@@ -177,9 +177,7 @@ export const ListThemes = (props: {
   return (
     <div>
       <div className="flex justify-between ">
-        {props.admin && (
-          <NewThemeDialogForm onSubmitForm={createNewThemeCoran} />
-        )}
+        {props.admin && <ThemeDialogForm onSubmitForm={createNewThemeCoran} />}
         <div className="flex gap-3">
           <div className="flex">
             <Button
@@ -217,7 +215,7 @@ export const ListThemes = (props: {
         </CardHeader>
         {gridMod ? (
           <CardContent>
-            <div className="grid grid-cols-4 gap-3">{getThemes()}</div>
+            <div className="grid grid-cols-3 gap-3">{getThemes()}</div>
           </CardContent>
         ) : (
           <CardContent>{getThemes()}</CardContent>

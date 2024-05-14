@@ -1,10 +1,7 @@
 import { ListThemes } from "@/components/clientComponents/theme/listThemes";
-import { ThemeItem } from "@/components/clientComponents/theme/themeItem";
+import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
 import { Prisma } from "@prisma/client";
-import { NewThemeDialogForm } from "../../components/clientComponents/theme/newThemeDialogForm";
-import { createNewThemeCoran } from "../../components/serverActions/themeCoranAction";
-import { getAuthSession } from "@/lib/auth";
 
 export const themeWithSubThemes =
   Prisma.validator<Prisma.theme$subThemesArgs>()({
@@ -16,7 +13,7 @@ export type ThemeWithSubThemes = Prisma.themeGetPayload<
   typeof themeWithSubThemes
 >;
 
-export default async function Page() {
+export default async function Themes() {
   const themes = await prisma.theme.findMany({
     include: { subThemes: true },
   });

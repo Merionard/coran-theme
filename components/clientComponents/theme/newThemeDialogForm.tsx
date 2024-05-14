@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { theme } from "@prisma/client";
+import { Pencil, Plus } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -31,34 +31,35 @@ const formSchema = z.object({
     .string()
     .min(3, "Minimum 3 caractères")
     .max(70, "Maximum 70 caractères"),
+  themeParent: z.number().optional(),
 });
 
+type SubmitFunction<T extends any[], R> = (...args: T) => Promise<R>;
+
 type Props = {
-  onSubmitForm: (
-    themeName: string,
-    themeId?: number
-  ) => Promise<{
-    id: number;
-    name: string;
-    parentId: number | null;
-  } | null>;
+  onSubmitForm: SubmitFunction<any[], theme | null>;
   parentId?: number;
+  theme?: theme;
+  parentThemesId?: number[];
 };
 
-export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
+export function ThemeDialogForm({ onSubmitForm, parentId, theme }: Props) {
   const [openModal, setOpenModal] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      themeName: "",
+      themeName: theme ? theme.name : "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const result = await onSubmitForm(values.themeName, parentId);
+      const result =
+        theme === undefined
+          ? await onSubmitForm(values.themeName, parentId)
+          : await onSubmitForm(values.themeName, theme.id);
       if (result === null) {
         form.setError("themeName", {
           type: "custom",
@@ -67,7 +68,10 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
         return;
       }
 
-      toast.success(result.name + " créé avec succès!");
+      const msg = theme
+        ? "Thème maj avec succès"
+        : result.name + " créé avec succès!";
+      toast.success(msg);
       setOpenModal(false);
       router.refresh();
     } catch (error) {
@@ -80,11 +84,12 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
   return (
     <Dialog open={openModal} onOpenChange={setOpenModal}>
       <Button
+        variant={theme ? "secondary" : "default"}
         size={"icon"}
         className="rounded-full"
         onClick={() => setOpenModal((prev) => !prev)}
       >
-        <Plus />
+        {theme ? <Pencil /> : <Plus />}
       </Button>
       <DialogContent>
         <DialogHeader>
@@ -105,7 +110,9 @@ export function NewThemeDialogForm({ onSubmitForm, parentId }: Props) {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <div className="flex justify-end">
+              <Button type="submit">Valider</Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

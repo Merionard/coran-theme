@@ -12,7 +12,7 @@ import { PropsWithChildren } from "react";
 
 export const ThemeCard = (props: PropsWithChildren<theme>) => {
   return (
-    <Card>
+    <Card className="transition ease-in-out delay-150 hover:scale-105 duration-300 cursor-pointer">
       <CardHeader>
         <Link href={`/themes_coran/${props.id}`}>
           <CardTitle>{props.name}</CardTitle>
