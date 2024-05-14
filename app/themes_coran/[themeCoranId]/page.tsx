@@ -12,6 +12,7 @@ import { ayat } from "@prisma/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash, Undo2 } from "lucide-react";
+import { DeleteThemeBtn } from "@/components/clientComponents/theme/deleteThemeBtn";
 
 export default async function ViewTheme({
   params,
@@ -51,9 +52,11 @@ export default async function ViewTheme({
     if (theme?.subThemes && theme.subThemes.length > 0) {
       //si il y a des sous thèmes
       return theme?.subThemes.map((subTheme) => (
-        <div key={subTheme.id} className="p-5 border mb-3">
-          <Link href={`/themes_coran/${subTheme.id}`}>{subTheme.name}</Link>
-        </div>
+        <Link href={`/themes_coran/${subTheme.id}`} key={subTheme.id}>
+          <div className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl bg-card">
+            {subTheme.name}
+          </div>
+        </Link>
       ));
     }
     //si pas de sous thèmes
@@ -64,7 +67,7 @@ export default async function ViewTheme({
             <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
           </div>
         )}
-        <CardContent>
+        <CardContent className="space-y-5 pt-5">
           {theme?.ayats.map((a) => (
             <AyatCard
               key={a.id}
@@ -82,44 +85,39 @@ export default async function ViewTheme({
   return (
     <div>
       <h2 className="text-6xl text-center">{theme?.name}</h2>
-
-      {session && session.user.role === "ADMIN" && (
-        <div className="flex justify-end gap-2 mt-5 mb-2 ">
-          <Button
-            asChild
-            variant={"outline"}
-            size={"icon"}
-            className="rounded-full"
+      <div className="flex justify-end gap-2 mt-5 mb-2 ">
+        <Button
+          asChild
+          variant={"outline"}
+          size={"icon"}
+          className="rounded-full"
+        >
+          <Link
+            href={
+              theme?.parentId !== null
+                ? `/themes_coran/${theme?.parentId}`
+                : "/themes_coran/"
+            }
           >
-            <Link
-              href={
-                theme?.parentId !== null
-                  ? `/themes_coran/${theme?.parentId}`
-                  : "/themes_coran/"
-              }
-            >
-              <Undo2 />
-            </Link>
-          </Button>
-          <ThemeDialogForm
-            onSubmitForm={updateThemeName}
-            parentId={Number(params.themeCoranId)}
-            theme={theme}
-            parentThemes={allOtherThemes}
-          />
-          <ThemeDialogForm
-            onSubmitForm={createNewThemeCoran}
-            parentId={Number(params.themeCoranId)}
-          />
-          <Button
-            variant={"destructive"}
-            size={"icon"}
-            className="rounded-full"
-          >
-            <Trash />
-          </Button>
-        </div>
-      )}
+            <Undo2 />
+          </Link>
+        </Button>
+        {session && session.user.role === "ADMIN" && (
+          <>
+            <ThemeDialogForm
+              onSubmitForm={updateThemeName}
+              parentId={Number(params.themeCoranId)}
+              theme={theme}
+              parentThemes={allOtherThemes}
+            />
+            <ThemeDialogForm
+              onSubmitForm={createNewThemeCoran}
+              parentId={Number(params.themeCoranId)}
+            />
+            <DeleteThemeBtn themeId={theme.id} />
+          </>
+        )}
+      </div>
       {getContent()}
     </div>
   );

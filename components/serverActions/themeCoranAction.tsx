@@ -84,3 +84,12 @@ export const updateThemeName = async (
     data: data,
   });
 };
+
+export const deleteTheme = async (themeId: number) => {
+  const session = await getAuthSession();
+  if (!session || session?.user.role !== "ADMIN") {
+    throw new Error("Vous devez être admin!");
+  }
+
+  return await prisma.theme.delete({ where: { id: themeId } });
+};
