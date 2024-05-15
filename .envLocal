@@ -9,3 +9,5 @@
 DATABASE_URL="postgresql://postgres:admin@localhost:5432/coran_db?schema=public"
 GOOGLE_CLIENT_ID="782846722527-eteemdfvc1u011d1dk3hq1b5orolbsna.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="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"
+DATABASE_URL="postgresql://mypgdbuser:laG46lJ0XSpQT6HK@michavps.librasoft.fr:5433/mypgdb?schema=public"
+blablatest
