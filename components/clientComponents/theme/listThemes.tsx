@@ -171,7 +171,7 @@ export const ListThemes = (props: {
   };
   return (
     <div>
-      <h2 className="text-center text-6xl ">
+      <h2 className="text-center text-4xl md:text-6xl ">
         Arborescence des thèmes coraniques
       </h2>
       <div className={`flex ${data ? "justify-between" : "justify-end"} mt-10`}>
@@ -211,7 +211,9 @@ export const ListThemes = (props: {
             <div className="grid grid-cols-3 gap-3 mt-5">{getThemes()}</div>
           </CardContent>
         ) : (
-          <CardContent className="py-10 pl-20 ">{getThemes()}</CardContent>
+          <CardContent className="md:py-10 md:pl-20 ">
+            {getThemes()}
+          </CardContent>
         )}
       </Card>
     </div>

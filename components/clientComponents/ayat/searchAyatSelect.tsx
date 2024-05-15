@@ -36,9 +36,9 @@ export const SelectAyat = ({ sourateWhithAyat, themeId }: props) => {
   };
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-wrap md:flex-nowrap">
       <Select onValueChange={(value) => setSourateSelected(Number(value))}>
-        <SelectTrigger className=" text-3xl">
+        <SelectTrigger className=" text-xl">
           <SelectValue placeholder="Sourate" />
         </SelectTrigger>
         <SelectContent>
@@ -54,7 +54,7 @@ export const SelectAyat = ({ sourateWhithAyat, themeId }: props) => {
         </SelectContent>
       </Select>
       <Select onValueChange={(ayat) => setSelectedAyatId(Number(ayat))}>
-        <SelectTrigger className="">
+        <SelectTrigger className="text-xl">
           <SelectValue placeholder="Ayat" />
         </SelectTrigger>
         <SelectContent>
@@ -63,13 +63,19 @@ export const SelectAyat = ({ sourateWhithAyat, themeId }: props) => {
             .map((s) => s.ayats)
             .flatMap((a) => a)
             .map((a) => (
-              <SelectItem key={a.number} value={a.id.toString()}>
+              <SelectItem
+                key={a.number}
+                value={a.id.toString()}
+                className="text-xl"
+              >
                 {a.number}
               </SelectItem>
             ))}
         </SelectContent>
       </Select>
-      <Button onClick={AddAyat}>Ajouter au thème</Button>
+      <Button onClick={AddAyat} className="m-auto">
+        Ajouter au thème
+      </Button>
     </div>
   );
 };

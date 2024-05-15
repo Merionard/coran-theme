@@ -86,11 +86,11 @@ export default async function ViewTheme({
     return (
       <Card>
         {session && session.user.role === "ADMIN" && (
-          <div className="m-auto w-3/4 my-16">
+          <div className="m-auto w-3/4 my-5 md:my-16">
             <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
           </div>
         )}
-        <CardContent className="space-y-5 pt-5">
+        <CardContent className="space-y-5 pt-5  p-3 md:p-6">
           {theme?.ayats.map((a) => (
             <AyatCard
               key={a.id}
@@ -107,8 +107,8 @@ export default async function ViewTheme({
 
   return (
     <div>
-      <h2 className="text-6xl text-center">{theme?.name}</h2>
-      <div className="flex justify-end gap-2 mt-5 mb-2 ">
+      <h2 className="text-4xl md:text-6xl text-center">{theme?.name}</h2>
+      <div className="flex justify-end gap-2 mt-10 mb-2 ">
         <Button
           asChild
           variant={"outline"}

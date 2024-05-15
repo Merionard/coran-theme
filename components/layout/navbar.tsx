@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { LogIn, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { AuthentBtn } from "../clientComponents/auth/authentBtn";
@@ -53,10 +53,11 @@ export const Navbar = () => {
               {l.name}
             </Link>
           ))}
-        <AuthentBtn />
+        <AuthentBtn onMobile={false} />
       </div>
       <div></div>
-      <div className="flex items-center md:hidden">
+      <div className="flex items-center gap-3 md:hidden">
+        <AuthentBtn onMobile={true} />
         {showMobileMenu ? (
           <X
             onClick={() => setShowMobileMenu(false)}
@@ -73,7 +74,7 @@ export const Navbar = () => {
         id="mobileMenu"
         className={
           showMobileMenu
-            ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900  ease-in-out duration-500 bg-blue-950 flex flex-col text-white"
+            ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900  ease-in-out duration-500 bg-card flex flex-col "
             : "ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%] flex flex-col "
         }
       >
@@ -81,7 +82,7 @@ export const Navbar = () => {
           <Link
             key={l.name}
             href={l.url}
-            className="p-4 border-b rounded-xl duration-300  cursor-pointer border-gray-600   hover:bg-blue-900 uppercase"
+            className="p-4 border-b rounded-xl duration-300  cursor-pointer border-gray-600   uppercase"
           >
             {l.name}
           </Link>

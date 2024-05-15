@@ -23,7 +23,9 @@ export default async function MyAyats() {
 
     return (
       <div>
-        <h2 className="text-center text-6xl mb-16">Mes Ayats</h2>
+        <h2 className="text-center text-4xl md:text-6xl mb-5 md:mb-16">
+          Mes Ayats
+        </h2>
         {data && data.myAyats.length > 0 ? (
           <div className="space-y-5">
             {data?.myAyats.map((ayat) => (
