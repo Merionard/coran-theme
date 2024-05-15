@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ThemeDialogForm } from "./newThemeDialogForm";
 import { ThemeCard } from "./themeCard";
+import { useSession } from "next-auth/react";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -22,6 +23,7 @@ export const ListThemes = (props: {
 }) => {
   const [search, setSearch] = useState("");
   const [gridMod, setGridMode] = useState(false);
+  const { data } = useSession();
 
   const getAllThemesWithRecursiveSubThemes = (
     theme: ThemeWithSubThemes,
@@ -172,7 +174,7 @@ export const ListThemes = (props: {
       <h2 className="text-center text-6xl ">
         Arborescence des thèmes coraniques
       </h2>
-      <div className="flex justify-between mt-10">
+      <div className={`flex ${data ? "justify-between" : "justify-end"} mt-10`}>
         {props.admin && <ThemeDialogForm onSubmitForm={createNewThemeCoran} />}
         <div className="flex gap-3">
           <div className="flex">

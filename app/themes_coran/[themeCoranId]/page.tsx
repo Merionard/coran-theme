@@ -60,7 +60,7 @@ export default async function ViewTheme({
   };
 
   const getContent = () => {
-    if (theme.subThemes.length === 0 && theme.ayats.length === 0) {
+    if (!session && theme.subThemes.length === 0 && theme.ayats.length === 0) {
       return (
         <Alert>
           <MessageCircleWarning className="h-4 w-4" />
