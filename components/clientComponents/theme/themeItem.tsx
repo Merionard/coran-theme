@@ -16,7 +16,7 @@ export const ThemeItem = (props: { theme: theme }) => {
 
   const updateName = async () => {
     try {
-      await updateThemeName(props.theme.id, themeName);
+      await updateThemeName(themeName, props.theme.id);
       setEditMode(false);
       router.refresh();
     } catch (error: any) {
