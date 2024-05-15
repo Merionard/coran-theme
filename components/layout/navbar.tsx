@@ -21,6 +21,10 @@ export const Navbar = () => {
       name: "mes ayats",
       url: "/mes_ayats",
     },
+    {
+      name: "mes thèmes",
+      url: "/mes_themes",
+    },
   ];
 
   return (

@@ -1,27 +1,20 @@
 "use client";
 
 import { ThemeWithSubThemes } from "@/app/themes_coran/page";
-import { ThemeItem } from "./themeItem";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { useState } from "react";
-import { ArrowRight, Grid3X3, List, Search } from "lucide-react";
-import Link from "next/link";
+import { createNewThemeCoran } from "@/components/serverActions/themeCoranAction";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { ThemeCard } from "./themeCard";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Grid3X3, List, Search } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 import { ThemeDialogForm } from "./newThemeDialogForm";
-import { createNewThemeCoran } from "@/components/serverActions/themeCoranAction";
+import { ThemeCard } from "./themeCard";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -176,7 +169,10 @@ export const ListThemes = (props: {
   };
   return (
     <div>
-      <div className="flex justify-between ">
+      <h2 className="text-center text-6xl ">
+        Arborescence des thèmes coraniques
+      </h2>
+      <div className="flex justify-between mt-10">
         {props.admin && <ThemeDialogForm onSubmitForm={createNewThemeCoran} />}
         <div className="flex gap-3">
           <div className="flex">
@@ -207,18 +203,13 @@ export const ListThemes = (props: {
           </div>
         </div>
       </div>
-      <Card className="mt-5">
-        <CardHeader>
-          <CardTitle className="text-5xl">
-            Arborescence des thèmes coraniques
-          </CardTitle>
-        </CardHeader>
+      <Card className="mt-10">
         {gridMod ? (
-          <CardContent>
-            <div className="grid grid-cols-3 gap-3">{getThemes()}</div>
+          <CardContent className="p-6">
+            <div className="grid grid-cols-3 gap-3 mt-5">{getThemes()}</div>
           </CardContent>
         ) : (
-          <CardContent>{getThemes()}</CardContent>
+          <CardContent className="p-6">{getThemes()}</CardContent>
         )}
       </Card>
     </div>

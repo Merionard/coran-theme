@@ -46,7 +46,7 @@ export const AyatCard = (props: {
   };
 
   return (
-    <div className="p-5 border">
+    <div className="p-5 border bg-card">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-xl font-bold">
           Sourate {props.ayat.sourate_number} verset {props.ayat.number}{" "}
@@ -64,12 +64,15 @@ export const AyatCard = (props: {
           {session && session.data && (
             <button
               className={cn(
-                "flex justify-center items-center rounded-full border p-2",
-                { "bg-red-300": props.isFavorite }
+                "flex justify-center items-center rounded-full border p-2"
               )}
               onClick={favoriteAction}
             >
-              <Heart className="h-4 w-4" />
+              <Heart
+                className={cn("h-4 w-4", {
+                  "text-red-600 fill-current": props.isFavorite,
+                })}
+              />
             </button>
           )}
         </div>

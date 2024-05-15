@@ -11,8 +11,11 @@ import { getAuthSession } from "@/lib/auth";
 import { ayat } from "@prisma/client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Pencil, Trash, Undo2 } from "lucide-react";
+import { MessageCircleWarning, Pencil, Trash, Undo2 } from "lucide-react";
 import { DeleteThemeBtn } from "@/components/clientComponents/theme/deleteThemeBtn";
+import { FavorisBtn } from "@/components/clientComponents/favoris/favorisBtn";
+import { toogleFavoriteTheme } from "@/components/serverActions/favorisAction";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default async function ViewTheme({
   params,
@@ -40,7 +43,7 @@ export default async function ViewTheme({
   const session = await getAuthSession();
   const user = await prisma.user.findFirst({
     where: { id: session?.user.id },
-    include: { myAyats: true },
+    include: { myAyats: true, myThemes: true },
   });
   const isAyatFavorite = (ayat: ayat) => {
     if (!session) return false;
@@ -48,7 +51,27 @@ export default async function ViewTheme({
     return false;
   };
 
+  const isThemeFavorite = () => {
+    if (!session) return false;
+    if (user) {
+      return user.myThemes.some((t) => t.id === theme.id);
+    }
+    return false;
+  };
+
   const getContent = () => {
+    if (theme.subThemes.length === 0 && theme.ayats.length === 0) {
+      return (
+        <Alert>
+          <MessageCircleWarning className="h-4 w-4" />
+
+          <AlertTitle>Oups</AlertTitle>
+          <AlertDescription>
+            Ce thème n&apos; pas encore de Ayats associées!
+          </AlertDescription>
+        </Alert>
+      );
+    }
     if (theme?.subThemes && theme.subThemes.length > 0) {
       //si il y a des sous thèmes
       return theme?.subThemes.map((subTheme) => (
@@ -102,6 +125,11 @@ export default async function ViewTheme({
             <Undo2 />
           </Link>
         </Button>
+        <FavorisBtn
+          isFavorite={isThemeFavorite()}
+          handleClick={toogleFavoriteTheme}
+          id={theme.id}
+        />
         {session && session.user.role === "ADMIN" && (
           <>
             <ThemeDialogForm

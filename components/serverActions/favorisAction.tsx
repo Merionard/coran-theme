@@ -51,3 +51,22 @@ export const toogleFavoriteAyat = async (
     },
   });
 };
+
+export const toogleFavoriteTheme = async (
+  themeId: number,
+  isFavorite: boolean
+) => {
+  const session = await getAuthSession();
+  if (!session) {
+    throw new Error("Vous devez être connecté pour ajouter des favoris!");
+  }
+  const action = isFavorite
+    ? { disconnect: { id: themeId } }
+    : { connect: { id: themeId } };
+  return prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      myThemes: action,
+    },
+  });
+};
