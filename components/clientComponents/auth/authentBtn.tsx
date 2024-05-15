@@ -25,3 +25,4 @@ export const AuthentBtn = (props: { onMobile: boolean }) => {
     return <LogOut onClick={() => signOut()} />;
   }
 };
+  
