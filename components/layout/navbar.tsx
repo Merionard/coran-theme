@@ -4,37 +4,55 @@ import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { AuthentBtn } from "../clientComponents/auth/authentBtn";
+import { useSession } from "next-auth/react";
 
 export const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const { data: session } = useSession();
 
   const links = [
     {
       name: "thèmes coraniques",
       url: "/themes_coran",
+      needSession: false,
     },
     {
       name: "thèmes hadith",
       url: "/themes_hadith",
+      needSession: false,
     },
     {
       name: "mes ayats",
       url: "/mes_ayats",
+      needSession: true,
     },
     {
       name: "mes thèmes",
       url: "/mes_themes",
+      needSession: true,
     },
   ];
 
   return (
     <nav className="h-20 bg-background border-b-[1px] border-border p-5 flex justify-end tracking-widest">
       <div className="hidden md:flex items-center gap-5">
-        {links.map((l) => (
-          <Link key={l.name} href={l.url} className="cursor-pointer uppercase">
-            {l.name}
-          </Link>
-        ))}
+        {links
+          .filter((l) => {
+            if (session) {
+              return true;
+            } else {
+              return !l.needSession;
+            }
+          })
+          .map((l) => (
+            <Link
+              key={l.name}
+              href={l.url}
+              className="cursor-pointer uppercase"
+            >
+              {l.name}
+            </Link>
+          ))}
         <AuthentBtn />
       </div>
       <div></div>
