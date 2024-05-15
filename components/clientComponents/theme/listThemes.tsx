@@ -62,10 +62,10 @@ export const ListThemes = (props: {
           className={
             gridMod
               ? theme.parentId === null
-                ? "pl-0"
+                ? "pl-0 mt-3"
                 : "pl-3"
               : theme.parentId === null
-              ? "pl-2"
+              ? "pl-2 mt-3"
               : "pl-10"
           }
           key={theme.id}
@@ -110,10 +110,10 @@ export const ListThemes = (props: {
           className={
             gridMod
               ? theme.parentId === null
-                ? "pl-0"
+                ? "pl-0 mt-3"
                 : "pl-3"
               : theme.parentId === null
-              ? "pl-2"
+              ? "pl-2 mt-3"
               : "pl-10"
           }
           key={theme.id}
@@ -211,7 +211,7 @@ export const ListThemes = (props: {
             <div className="grid grid-cols-3 gap-3 mt-5">{getThemes()}</div>
           </CardContent>
         ) : (
-          <CardContent className="p-6">{getThemes()}</CardContent>
+          <CardContent className="py-10 pl-20 ">{getThemes()}</CardContent>
         )}
       </Card>
     </div>
