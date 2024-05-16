@@ -14,7 +14,7 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const amiri = Amiri({ weight: "400", subsets: ["arabic", "latin"] });
 const noto = Noto_Sans_Arabic({ subsets: ["arabic"], weight: "200" });
-const cairo = Cairo({ subsets: ["arabic", "latin"] });
+
 const roboto = Roboto({ weight: "300", subsets: ["latin"] });
 
 const APP_NAME = "Coran thèmes";
