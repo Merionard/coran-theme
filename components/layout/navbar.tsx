@@ -1,10 +1,10 @@
 "use client";
 
-import { LogIn, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { AuthentBtn } from "../clientComponents/auth/authentBtn";
-import { useSession } from "next-auth/react";
 
 export const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -74,19 +74,28 @@ export const Navbar = () => {
         id="mobileMenu"
         className={
           showMobileMenu
-            ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900  ease-in-out duration-500 bg-card flex flex-col "
+            ? "fixed md:hidden left-0 top-0 w-[60%] h-full border-r border-r-gray-900  ease-in-out duration-500 bg-card flex flex-col z-10 "
             : "ease-in-out w-[60%] duration-500 fixed top-0 bottom-0 left-[-100%] flex flex-col "
         }
       >
-        {links.map((l) => (
-          <Link
-            key={l.name}
-            href={l.url}
-            className="p-4 border-b rounded-xl duration-300  cursor-pointer border-gray-600   uppercase"
-          >
-            {l.name}
-          </Link>
-        ))}
+        {links
+          .filter((l) => {
+            if (session) {
+              return true;
+            } else {
+              return !l.needSession;
+            }
+          })
+          .map((l) => (
+            <Link
+              key={l.name}
+              href={l.url}
+              className="p-4 border-b rounded-xl duration-300  cursor-pointer border-gray-600   uppercase"
+              onClick={() => setShowMobileMenu(false)}
+            >
+              {l.name}
+            </Link>
+          ))}
       </ul>
     </nav>
   );

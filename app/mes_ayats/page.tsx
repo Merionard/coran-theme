@@ -8,7 +8,16 @@ import { MessageCircleWarning } from "lucide-react";
 export default async function MyAyats() {
   const session = await getAuthSession();
   if (!session) {
-    throw new Error("Vous devez vous connecter pour accéder au favoris");
+    return (
+      <Alert>
+        <MessageCircleWarning className="h-4 w-4" />
+
+        <AlertTitle>Oups</AlertTitle>
+        <AlertDescription>
+          Vous devez vous connecter pour accéder à vos Ayats!
+        </AlertDescription>
+      </Alert>
+    );
   } else {
     const data = await prisma.user.findUnique({
       where: { id: session.user.id },

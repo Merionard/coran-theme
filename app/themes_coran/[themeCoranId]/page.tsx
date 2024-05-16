@@ -75,8 +75,15 @@ export default async function ViewTheme({
     if (theme?.subThemes && theme.subThemes.length > 0) {
       //si il y a des sous thèmes
       return theme?.subThemes.map((subTheme) => (
-        <Link href={`/themes_coran/${subTheme.id}`} key={subTheme.id}>
-          <div className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl bg-card">
+        <Link
+          href={`/themes_coran/${subTheme.id}`}
+          key={subTheme.id}
+          className="active:bg-primary"
+        >
+          <div
+            className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl 
+          bg-card"
+          >
             {subTheme.name}
           </div>
         </Link>

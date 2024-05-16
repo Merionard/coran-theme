@@ -16,6 +16,7 @@ import { useState } from "react";
 import { ThemeDialogForm } from "./newThemeDialogForm";
 import { ThemeCard } from "./themeCard";
 import { useSession } from "next-auth/react";
+import { cn } from "@/lib/utils";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -75,13 +76,12 @@ export const ListThemes = (props: {
 
             <Link
               href={`/themes_coran/${theme.id}`}
-              className={
-                gridMod
-                  ? "text-base"
-                  : theme.parentId === null
-                  ? "font-bold text-2xl"
-                  : "text-xl"
-              }
+              className={cn({
+                "text-base": gridMod,
+                "font-bold text-2xl": !gridMod && theme.parentId === null,
+                "text-xl": !gridMod && theme.parentId !== null,
+                "active:text-primary": true,
+              })}
             >
               {theme.name}
             </Link>
@@ -122,13 +122,12 @@ export const ListThemes = (props: {
             {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
             <Link
               href={`/themes_coran/${theme.id}`}
-              className={
-                gridMod
-                  ? "text-base"
-                  : theme.parentId === null
-                  ? "font-bold text-2xl"
-                  : `text-xl`
-              }
+              className={cn({
+                "text-base": gridMod,
+                "font-bold text-2xl": !gridMod && theme.parentId === null,
+                "text-xl": !gridMod && theme.parentId !== null,
+                "active:text-primary": true,
+              })}
             >
               {theme.name}
             </Link>
@@ -208,7 +207,9 @@ export const ListThemes = (props: {
       <Card className="mt-10">
         {gridMod ? (
           <CardContent className="p-6">
-            <div className="grid grid-cols-3 gap-3 mt-5">{getThemes()}</div>
+            <div className="space-y-3 md:space-y-0 md:grid grid-cols-3 gap-3 mt-5">
+              {getThemes()}
+            </div>
           </CardContent>
         ) : (
           <CardContent className="md:py-10 md:pl-20 ">

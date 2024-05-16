@@ -10,7 +10,14 @@ import Link from "next/link";
 export default async function myThemes() {
   const session = await getAuthSession();
   if (!session) {
-    throw new Error("Vous devez vous connecter pour accéder au favoris");
+    <Alert>
+      <MessageCircleWarning className="h-4 w-4" />
+
+      <AlertTitle>Oups</AlertTitle>
+      <AlertDescription>
+        Vous devez vous connecter pour accéder à vos thèmes!
+      </AlertDescription>
+    </Alert>;
   } else {
     const data = await prisma.user.findUnique({
       where: { id: session.user.id },
@@ -18,12 +25,6 @@ export default async function myThemes() {
         myThemes: { include: { ayats: { include: { sourate: true } } } },
       },
     });
-
-    const isAyatFavorite = (themeId: number) => {
-      if (!session) return false;
-      if (data) return data.myThemes.some((a) => a.id === themeId);
-      return false;
-    };
 
     return (
       <div>
