@@ -9,9 +9,10 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
-import { ayat } from "@prisma/client";
+import { ayat, theme } from "@prisma/client";
 import { Heart, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -20,6 +21,7 @@ export const AyatCard = (props: {
   titreSourate: string;
   themeId?: number;
   isFavorite: boolean;
+  themes?: theme[];
 }) => {
   const router = useRouter();
   const session = useSession();
@@ -77,6 +79,18 @@ export const AyatCard = (props: {
           )}
         </div>
       </div>
+      {props.themes && (
+        <div>
+          <h3 className="underline text-xl">Liste des thèmes associés</h3>
+          {props.themes?.map((t) => (
+            <li key={t.id}>
+              <Link href={`/themes_coran/${t.id}`}>{t.name}</Link>
+            </li>
+          ))}
+        </div>
+      )}
+      {}
+
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className=" text-3xl">

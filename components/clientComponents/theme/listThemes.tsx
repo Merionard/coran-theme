@@ -73,7 +73,6 @@ export const ListThemes = (props: {
         >
           <div className="flex gap-1 items-center">
             {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
-
             <Link
               href={`/themes_coran/${theme.id}`}
               className={cn({
@@ -84,6 +83,7 @@ export const ListThemes = (props: {
               })}
             >
               {theme.name}
+              {theme.ayats.length > 0 && <span>({theme.ayats.length})</span>}
             </Link>
           </div>
 
@@ -130,6 +130,7 @@ export const ListThemes = (props: {
               })}
             >
               {theme.name}
+              {<span> ({theme.ayats.length})</span>}
             </Link>
           </div>
         </div>
@@ -171,7 +172,11 @@ export const ListThemes = (props: {
       <h2 className="text-center text-4xl  md:text-6xl ">
         Arborescence des thèmes coraniques
       </h2>
-      <div className={`flex ${data ? "justify-between" : "justify-end"} mt-10`}>
+      <div
+        className={`flex ${
+          data && data.user.role === "ADMIN" ? "justify-between" : "justify-end"
+        } mt-10`}
+      >
         {props.admin && <ThemeDialogForm onSubmitForm={createNewThemeCoran} />}
         <div className="flex gap-3">
           <div className="flex">

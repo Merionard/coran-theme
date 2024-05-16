@@ -13,6 +13,11 @@ export const Navbar = () => {
 
   const links = [
     {
+      name: "coran",
+      url: "/coran",
+      needSession: false,
+    },
+    {
       name: "thèmes coraniques",
       url: "/themes_coran",
       needSession: false,

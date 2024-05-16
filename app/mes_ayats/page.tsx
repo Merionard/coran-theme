@@ -21,7 +21,7 @@ export default async function MyAyats() {
   } else {
     const data = await prisma.user.findUnique({
       where: { id: session.user.id },
-      include: { myAyats: { include: { sourate: true } } },
+      include: { myAyats: { include: { sourate: true, theme: true } } },
     });
 
     const isAyatFavorite = (ayat: ayat) => {
@@ -43,6 +43,7 @@ export default async function MyAyats() {
                 titreSourate={ayat.sourate.titre}
                 key={ayat.id}
                 isFavorite={isAyatFavorite(ayat)}
+                themes={ayat.theme}
               />
             ))}
           </div>

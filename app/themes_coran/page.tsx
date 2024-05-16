@@ -7,6 +7,7 @@ export const themeWithSubThemes =
   Prisma.validator<Prisma.theme$subThemesArgs>()({
     include: {
       subThemes: true,
+      ayats: true,
     },
   });
 export type ThemeWithSubThemes = Prisma.themeGetPayload<
@@ -15,7 +16,7 @@ export type ThemeWithSubThemes = Prisma.themeGetPayload<
 
 export default async function Themes() {
   const themes = await prisma.theme.findMany({
-    include: { subThemes: true },
+    include: { subThemes: true, ayats: true },
   });
 
   const session = await getAuthSession();
