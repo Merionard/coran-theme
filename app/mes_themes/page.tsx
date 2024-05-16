@@ -1,10 +1,7 @@
-import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
-import { ayat } from "@prisma/client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MessageCircleWarning } from "lucide-react";
-import { ThemeCard } from "@/components/clientComponents/theme/themeCard";
 import Link from "next/link";
 
 export default async function myThemes() {

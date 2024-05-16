@@ -60,7 +60,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
+        <Providers attribute="class" defaultTheme="dark">
           <Navbar />
           <main className="px-2 md:container mt-5 md:mt-20 ">{children}</main>
           <Toaster />

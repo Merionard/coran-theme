@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 import { AuthentBtn } from "../clientComponents/auth/authentBtn";
+import { ModeToggle } from "./modeToggle";
 
 export const Navbar = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
@@ -34,7 +35,7 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className="h-20 bg-background border-b-[1px] border-border p-5 flex justify-end tracking-widest">
+    <nav className="h-20 bg-background border-b-[1px] border-border p-5  md:flex  md:justify-end tracking-widest">
       <div className="hidden md:flex items-center gap-5">
         {links
           .filter((l) => {
@@ -53,22 +54,27 @@ export const Navbar = () => {
               {l.name}
             </Link>
           ))}
+        <ModeToggle />
         <AuthentBtn onMobile={false} />
       </div>
-      <div></div>
-      <div className="flex items-center gap-3 md:hidden">
-        <AuthentBtn onMobile={true} />
-        {showMobileMenu ? (
-          <X
-            onClick={() => setShowMobileMenu(false)}
-            className="cursor-pointer"
-          />
-        ) : (
-          <Menu
-            onClick={() => setShowMobileMenu(true)}
-            className="cursor-pointer"
-          />
-        )}
+
+      <div className=" mt-2 flex items-center justify-between gap-3 md:hidden">
+        <ModeToggle />
+        <div className="flex items-center gap-3">
+          {showMobileMenu ? (
+            <X
+              onClick={() => setShowMobileMenu(false)}
+              className="cursor-pointer"
+            />
+          ) : (
+            <Menu
+              onClick={() => setShowMobileMenu(true)}
+              className="cursor-pointer"
+            />
+          )}
+
+          <AuthentBtn onMobile={true} />
+        </div>
       </div>
       <ul
         id="mobileMenu"

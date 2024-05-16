@@ -144,16 +144,14 @@ export const ListThemes = (props: {
         .map((t) => {
           if (gridMod)
             return (
-              <ThemeCard
-                key={t.id}
-                name={t.name}
-                id={t.id}
-                parentId={t.parentId}
-                description={t.description}
-              />
+              <Link href={`/themes_coran/${t.id}`} key={t.id}>
+                <div className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl bg-card">
+                  {t.name}
+                </div>
+              </Link>
             );
           return (
-            <div key={t.id}>
+            <div key={t.id} className=" mt-3">
               <Link
                 href={`/themes_coran/${t.id}`}
                 className={t.parentId === null ? "font-bold text-xl" : ""}
