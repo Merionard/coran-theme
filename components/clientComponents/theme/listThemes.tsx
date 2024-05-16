@@ -168,7 +168,7 @@ export const ListThemes = (props: {
   };
   return (
     <div>
-      <h2 className="text-center text-4xl md:text-6xl ">
+      <h2 className="text-center text-4xl  md:text-6xl ">
         Arborescence des thèmes coraniques
       </h2>
       <div className={`flex ${data ? "justify-between" : "justify-end"} mt-10`}>

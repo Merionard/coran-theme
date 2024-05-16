@@ -1,11 +1,21 @@
 import { Navbar } from "@/components/layout/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import {
+  Amiri,
+  Cairo,
+  Inter,
+  Noto_Sans_Arabic,
+  Roboto,
+} from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const amiri = Amiri({ weight: "400", subsets: ["arabic", "latin"] });
+const noto = Noto_Sans_Arabic({ subsets: ["arabic"], weight: "200" });
+const cairo = Cairo({ subsets: ["arabic", "latin"] });
+const roboto = Roboto({ weight: "300", subsets: ["latin"] });
 
 const APP_NAME = "Coran thèmes";
 const APP_DEFAULT_TITLE = "Coran thèmes";
@@ -59,8 +69,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <Providers attribute="class" defaultTheme="dark">
+      <body className={inter.className + " "}>
+        <Providers attribute="class" defaultTheme="light">
           <Navbar />
           <main className="px-2 md:container mt-5 md:mt-20 ">{children}</main>
           <Toaster />
