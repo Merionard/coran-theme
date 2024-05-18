@@ -5,7 +5,8 @@ import { prisma } from "@/prisma/client";
 
 export const createNewThemeCoran = async (
   themeName: string,
-  parentId?: number
+  parentId?: number,
+  description?: string
 ) => {
   const session = await getAuthSession();
 
@@ -23,12 +24,18 @@ export const createNewThemeCoran = async (
     });
     if (themeParent) {
       const newTheme = await prisma.theme.create({
-        data: { name: themeName, parent: { connect: { id: parentId } } },
+        data: {
+          name: themeName,
+          parent: { connect: { id: parentId } },
+          description: description,
+        },
       });
       return newTheme;
     }
   }
-  const newTheme = await prisma.theme.create({ data: { name: themeName } });
+  const newTheme = await prisma.theme.create({
+    data: { name: themeName, description: description },
+  });
   return newTheme;
 };
 
@@ -62,10 +69,11 @@ export const removeAyatOnTheme = async (themeId: number, ayatId: number) => {
   });
 };
 
-export const updateThemeName = async (
+export const updateTheme = async (
   name: string,
   themeId: number,
-  parentId?: number
+  parentId?: number,
+  description?: string
 ) => {
   const session = await getAuthSession();
   if (!session || session?.user.role !== "ADMIN") {
@@ -75,9 +83,11 @@ export const updateThemeName = async (
     ? {
         name: name,
         parentId: parentId,
+        description: description,
       }
     : {
         name: name,
+        description: description,
       };
   return await prisma.theme.update({
     where: { id: themeId },

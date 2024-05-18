@@ -2,7 +2,7 @@ import { prisma } from "@/prisma/client";
 import { ThemeDialogForm } from "../../../components/clientComponents/theme/newThemeDialogForm";
 import {
   createNewThemeCoran,
-  updateThemeName,
+  updateTheme,
 } from "../../../components/serverActions/themeCoranAction";
 import Link from "next/link";
 import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
@@ -72,43 +72,51 @@ export default async function ViewTheme({
         </Alert>
       );
     }
-    if (theme?.subThemes && theme.subThemes.length > 0) {
-      //si il y a des sous thèmes
-      return theme?.subThemes.map((subTheme) => (
-        <Link
-          href={`/themes_coran/${subTheme.id}`}
-          key={subTheme.id}
-          className="active:bg-primary"
-        >
-          <div
-            className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl 
-          bg-card"
-          >
-            {subTheme.name}
-          </div>
-        </Link>
-      ));
-    }
-    //si pas de sous thèmes
+
     return (
-      <Card>
-        {session && session.user.role === "ADMIN" && (
-          <div className="m-auto w-3/4 my-5 md:my-16">
-            <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+      <div className="space-y-5">
+        <div>
+          {session && session.user.role === "ADMIN" && (
+            <div className="m-auto w-3/4 my-5 md:my-16">
+              <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
+            </div>
+          )}
+          <div>
+            <p>{theme.description}</p>
+          </div>
+          <div className="space-y-5 pt-5  p-3 md:p-6">
+            {theme?.ayats.map((a) => (
+              <AyatCard
+                key={a.id}
+                ayat={a}
+                titreSourate={a.sourate.titre}
+                themeId={theme.id}
+                isFavorite={isAyatFavorite(a)}
+              />
+            ))}
+          </div>
+        </div>
+        {theme.subThemes.length > 0 && (
+          <div>
+            <hr className="mx-auto w-3/4 border-2 border-black" />
+            <h3 className="text-center text-4xl my-3">Sous thèmes</h3>
+            {theme?.subThemes.map((subTheme) => (
+              <Link
+                href={`/themes_coran/${subTheme.id}`}
+                key={subTheme.id}
+                className="active:bg-primary"
+              >
+                <div
+                  className="p-5 border mb-3 transition ease-in-out delay-150 hover:scale-110 duration-300 cursor-pointer text-center text-xl 
+          bg-card"
+                >
+                  {subTheme.name}
+                </div>
+              </Link>
+            ))}
           </div>
         )}
-        <CardContent className="space-y-5 pt-5  p-3 md:p-6">
-          {theme?.ayats.map((a) => (
-            <AyatCard
-              key={a.id}
-              ayat={a}
-              titreSourate={a.sourate.titre}
-              themeId={theme.id}
-              isFavorite={isAyatFavorite(a)}
-            />
-          ))}
-        </CardContent>
-      </Card>
+      </div>
     );
   };
 
@@ -140,7 +148,7 @@ export default async function ViewTheme({
         {session && session.user.role === "ADMIN" && (
           <>
             <ThemeDialogForm
-              onSubmitForm={updateThemeName}
+              onSubmitForm={updateTheme}
               parentId={Number(params.themeCoranId)}
               theme={theme}
               parentThemes={allOtherThemes}

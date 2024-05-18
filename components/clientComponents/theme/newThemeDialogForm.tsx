@@ -24,6 +24,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { theme } from "@prisma/client";
 import { Link, Pencil, Plus } from "lucide-react";
@@ -40,6 +41,7 @@ const formSchema = z.object({
     .min(3, "Minimum 3 caractères")
     .max(70, "Maximum 70 caractères"),
   themeParent: z.number().optional(),
+  description: z.string().optional(),
 });
 
 type SubmitFunction<T extends any[], R> = (...args: T) => Promise<R>;
@@ -72,8 +74,13 @@ export function ThemeDialogForm({
       //si theme existe on le modifie si non création d'un nouveau theme
       const result =
         theme === undefined
-          ? await onSubmitForm(values.themeName, parentId)
-          : await onSubmitForm(values.themeName, theme.id, values.themeParent);
+          ? await onSubmitForm(values.themeName, parentId, values.description)
+          : await onSubmitForm(
+              values.themeName,
+              theme.id,
+              values.themeParent,
+              values.description
+            );
       if (result === null) {
         form.setError("themeName", {
           type: "custom",
@@ -118,7 +125,20 @@ export function ThemeDialogForm({
                 <FormItem>
                   <FormLabel>Nouveau Thème</FormLabel>
                   <FormControl>
-                    <Input placeholder="shadcn" {...field} />
+                    <Input placeholder="nom" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Description du thème" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

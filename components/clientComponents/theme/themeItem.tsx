@@ -1,5 +1,5 @@
 "use client";
-import { updateThemeName } from "@/components/serverActions/themeCoranAction";
+import { updateTheme } from "@/components/serverActions/themeCoranAction";
 import { Input } from "@/components/ui/input";
 import { theme } from "@prisma/client";
 import { Check, Cross, Pencil, X } from "lucide-react";
@@ -16,7 +16,7 @@ export const ThemeItem = (props: { theme: theme }) => {
 
   const updateName = async () => {
     try {
-      await updateThemeName(themeName, props.theme.id);
+      await updateTheme(themeName, props.theme.id);
       setEditMode(false);
       router.refresh();
     } catch (error: any) {
