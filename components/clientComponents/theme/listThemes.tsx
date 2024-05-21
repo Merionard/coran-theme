@@ -17,6 +17,7 @@ import { ThemeDialogForm } from "./newThemeDialogForm";
 import { ThemeCard } from "./themeCard";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
+import { SearchInput } from "@/components/ui/searchInput";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -197,14 +198,10 @@ export const ListThemes = (props: {
               <List />
             </Button>
           </div>
-          <div className="relative w-full">
-            <Input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Rechercher thème"
-            />
-            <Search className="h-6 w-6 absolute top-1/2  -translate-y-1/2 right-3 text-gray-400" />
-          </div>
+          <SearchInput
+            search={search}
+            onSearch={(search: string) => setSearch(search)}
+          />
         </div>
       </div>
       <Card className="mt-10">
