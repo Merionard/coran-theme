@@ -137,7 +137,7 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
     }
   };
 
-  const majSearchValue = useDebounce((val: string) => onSetSearch(val), 3000);
+  const majSearchValue = useDebounce((val: string) => onSetSearch(val), 2000);
   const onSearch = (value: string) => {
     setSearch(value);
     majSearchValue(value);
