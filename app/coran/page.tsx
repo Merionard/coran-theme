@@ -1,3 +1,4 @@
+import { PageCoran } from "@/components/clientComponents/coran/pageCoran";
 import { SearchAyat } from "@/components/clientComponents/coran/searchAyat";
 import { Card, CardContent } from "@/components/ui/card";
 import { prisma } from "@/prisma/client";
@@ -13,28 +14,7 @@ export default async function Coran() {
 
   return (
     <div>
-      <SearchAyat />
-      <div className="space-y-5">
-        {sourates.map((s) => (
-          <Card
-            className="flex justify-center items-center gap-5"
-            key={s.number}
-          >
-            <Link href={`coran/${s.number}`}>
-              <div
-                className={
-                  note.className +
-                  " text-3xl h-14 flex justify-center items-center"
-                }
-              >
-                <p>
-                  {s.number} {s.titre}
-                </p>
-              </div>
-            </Link>
-          </Card>
-        ))}
-      </div>
+      <PageCoran sourates={sourates} font={note} />
     </div>
   );
 }

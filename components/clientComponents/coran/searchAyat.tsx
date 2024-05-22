@@ -6,26 +6,44 @@ import {
 } from "@/components/serverActions/coranAction";
 import { Button } from "@/components/ui/button";
 import { SearchInput } from "@/components/ui/searchInput";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState } from "react";
+import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
+import { useRef, useState } from "react";
 
-export const SearchAyat = () => {
+function useDebounce<T>(callBack: (...args: [T]) => void, time: number) {
+  const debounce = useRef<null | NodeJS.Timeout>(null);
+
+  return (...args: [T]) => {
+    if (debounce.current) {
+      clearTimeout(debounce.current);
+    }
+    debounce.current = setTimeout(() => callBack(...args), time);
+  };
+}
+
+type props = {
+  ifSomeSearch: (is: boolean) => void;
+};
+
+export const SearchAyat = ({ ifSomeSearch }: props) => {
   const [search, setSearch] = useState("");
   const [ayats, setAyats] = useState<AyatWithTitre[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
 
   const pageSize = 10;
 
   const fetchAyats = async (searchTerm: string, pageNumber: number) => {
-    const result = await searchAyats(searchTerm, pageNumber, pageSize);
-    setAyats(result.ayats);
-    setTotalPages(Math.ceil(result.totalCount / pageSize));
-    setPage(pageNumber);
+    searchAyats(searchTerm, pageNumber, pageSize).then((result) => {
+      setAyats(result.ayats);
+      setTotalPages(Math.ceil(result.totalCount / pageSize));
+      setPage(pageNumber);
+      setIsLoading(false);
+    });
+    setIsLoading(true);
   };
 
   const onSetSearch = async (value: string) => {
-    setSearch(value);
     if (value === "") {
       setAyats([]);
       setPage(1);
@@ -119,15 +137,32 @@ export const SearchAyat = () => {
     }
   };
 
+  const majSearchValue = useDebounce((val: string) => onSetSearch(val), 500);
+  const onSearch = (value: string) => {
+    setSearch(value);
+    majSearchValue(value);
+  };
+
+  if (ayats.length > 0) {
+    ifSomeSearch(true);
+  } else {
+    ifSomeSearch(false);
+  }
+
+  if (isLoading) {
+    return <Loader className="animate-spin mx-auto" />;
+  }
+
   return (
     <div>
       <div className="flex justify-end">
         <SearchInput
-          onSearch={onSetSearch}
+          onSearch={onSearch}
           search={search}
-          placeHolder="Tappez votre recherche"
+          placeHolder="Rechercher dans le coran"
         />
       </div>
+
       {ayats.length > 0 && (
         <div className="flex justify-center mt-5 gap-3 items-center">
           <Button
