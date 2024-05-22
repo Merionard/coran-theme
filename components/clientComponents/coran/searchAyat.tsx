@@ -43,15 +43,15 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
     setIsLoading(true);
   };
 
-  const onSetSearch = async (value: string) => {
-    if (value === "") {
+  const onSetSearch = async () => {
+    if (search === "") {
       setAyats([]);
       setPage(1);
       setTotalPages(1);
       return;
     }
     setPage(1); // Reset to first page on new search
-    await fetchAyats(value, 1);
+    await fetchAyats(search, 1);
   };
 
   const handlePreviousPage = async () => {
@@ -77,8 +77,14 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
       return <>{text}</>;
     }
     const harakats = /[\u064B-\u0652]/g;
-    const textWithoutHarakat = text.replace(harakats, "");
-    const searhWithoutHarakats = searchTerm.replace(harakats, "");
+    const textWithoutHarakat = text.replace(
+      /[\u064B-\u065F\u0670\u06D6-\u06ED]/g,
+      ""
+    );
+    const searhWithoutHarakats = searchTerm.replace(
+      /[\u064B-\u065F\u0670\u06D6-\u06ED]/g,
+      ""
+    );
 
     const regex = new RegExp(`(${searhWithoutHarakats})`, "gi");
     const parts = textWithoutHarakat.split(regex);
@@ -137,12 +143,6 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
     }
   };
 
-  const majSearchValue = useDebounce((val: string) => onSetSearch(val), 2000);
-  const onSearch = (value: string) => {
-    setSearch(value);
-    majSearchValue(value);
-  };
-
   if (ayats.length > 0) {
     ifSomeSearch(true);
   } else {
@@ -153,14 +153,22 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
     return <Loader className="animate-spin mx-auto" />;
   }
 
+  const onSearch = (value: string) => {
+    if (value === "") {
+      setAyats([]);
+    }
+    setSearch(value);
+  };
+
   return (
     <div>
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-2">
         <SearchInput
           onSearch={onSearch}
           search={search}
           placeHolder="Rechercher dans le coran"
         />
+        <Button onClick={onSetSearch}>Rechercher</Button>
       </div>
 
       {ayats.length > 0 && (
