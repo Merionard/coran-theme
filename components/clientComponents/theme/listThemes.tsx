@@ -72,21 +72,19 @@ export const ListThemes = (props: {
           }
           key={theme.id}
         >
-          <div className="flex gap-1 items-center">
-            {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
-            <Link
-              href={`/themes_coran/${theme.id}`}
-              className={cn({
-                "text-base": gridMod,
-                "font-bold text-2xl": !gridMod && theme.parentId === null,
-                "text-xl": !gridMod && theme.parentId !== null,
-                "active:text-primary": true,
-              })}
-            >
-              {theme.name}
-              {theme.ayats.length > 0 && <span>({theme.ayats.length})</span>}
-            </Link>
-          </div>
+          <Link
+            href={`/themes_coran/${theme.id}`}
+            className={cn({
+              "text-base": gridMod,
+              "font-bold text-2xl": !gridMod && theme.parentId === null,
+              "text-xl": !gridMod && theme.parentId !== null,
+              "active:text-primary": true,
+              "arrow-dark": theme.parentId !== null,
+            })}
+          >
+            {theme.name}
+            {theme.ayats.length > 0 && <span>({theme.ayats.length})</span>}
+          </Link>
 
           {subThemes.map((s) =>
             getAllThemesWithRecursiveSubThemes(s, subLevel + 2)
@@ -119,21 +117,19 @@ export const ListThemes = (props: {
           }
           key={theme.id}
         >
-          <div className="flex gap-1 items-center">
-            {theme.parentId !== null && <ArrowRight className="h-4 w-4" />}
-            <Link
-              href={`/themes_coran/${theme.id}`}
-              className={cn({
-                "text-base": gridMod,
-                "font-bold text-2xl": !gridMod && theme.parentId === null,
-                "text-xl": !gridMod && theme.parentId !== null,
-                "active:text-primary": true,
-              })}
-            >
-              {theme.name}
-              {<span> ({theme.ayats.length})</span>}
-            </Link>
-          </div>
+          <Link
+            href={`/themes_coran/${theme.id}`}
+            className={cn({
+              "text-base": gridMod,
+              "font-bold text-2xl": !gridMod && theme.parentId === null,
+              "text-xl": !gridMod && theme.parentId !== null,
+              "active:text-primary": true,
+              "arrow-dark": theme.parentId !== null,
+            })}
+          >
+            {theme.name}
+            {<span> ({theme.ayats.length})</span>}
+          </Link>
         </div>
       );
     }
