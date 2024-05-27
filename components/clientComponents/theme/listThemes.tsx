@@ -18,6 +18,7 @@ import { ThemeCard } from "./themeCard";
 import { useSession } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { SearchInput } from "@/components/ui/searchInput";
+import { useTheme } from "next-themes";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -26,6 +27,7 @@ export const ListThemes = (props: {
   const [search, setSearch] = useState("");
   const [gridMod, setGridMode] = useState(false);
   const { data } = useSession();
+  const { theme: colorTheme } = useTheme();
 
   const getAllThemesWithRecursiveSubThemes = (
     theme: ThemeWithSubThemes,
@@ -79,7 +81,8 @@ export const ListThemes = (props: {
               "font-bold text-2xl": !gridMod && theme.parentId === null,
               "text-xl": !gridMod && theme.parentId !== null,
               "active:text-primary": true,
-              "arrow-dark": theme.parentId !== null,
+              "arrow-dark": theme.parentId !== null && colorTheme === "light",
+              "arrow-white": theme.parentId !== null && colorTheme === "dark",
             })}
           >
             {theme.name}
@@ -124,7 +127,8 @@ export const ListThemes = (props: {
               "font-bold text-2xl": !gridMod && theme.parentId === null,
               "text-xl": !gridMod && theme.parentId !== null,
               "active:text-primary": true,
-              "arrow-dark": theme.parentId !== null,
+              "arrow-dark": theme.parentId !== null && colorTheme === "light",
+              "arrow-white": theme.parentId !== null && colorTheme === "dark",
             })}
           >
             {theme.name}

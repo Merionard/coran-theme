@@ -59,3 +59,9 @@
   background: url(../assets/arrow-right-black.svg) 2px 4px no-repeat;
   background-size: 18px;
 }
+
+.arrow-white {
+  padding-left: 30px;
+  background: url(../assets/arrow-right-white.svg) 2px 4px no-repeat;
+  background-size: 18px;
+}
