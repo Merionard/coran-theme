@@ -78,6 +78,7 @@ model theme {
   subThemes theme[] @relation("ParentTheme")
   description String?
   users      User[] @relation("UserThemes")
+  order     Int?
 }
 
 model sourate {

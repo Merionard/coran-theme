@@ -17,6 +17,7 @@ export type ThemeWithSubThemes = Prisma.themeGetPayload<
 export default async function Themes() {
   const themes = await prisma.theme.findMany({
     include: { subThemes: true, ayats: true },
+    orderBy: { order: "asc" },
   });
 
   const session = await getAuthSession();

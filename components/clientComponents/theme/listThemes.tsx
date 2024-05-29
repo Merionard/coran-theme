@@ -9,16 +9,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { Input } from "@/components/ui/input";
-import { ArrowRight, Grid3X3, List, Search } from "lucide-react";
+import { SearchInput } from "@/components/ui/searchInput";
+import { cn } from "@/lib/utils";
+import { Grid3X3, List } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useState } from "react";
 import { ThemeDialogForm } from "./newThemeDialogForm";
 import { ThemeCard } from "./themeCard";
-import { useSession } from "next-auth/react";
-import { cn } from "@/lib/utils";
-import { SearchInput } from "@/components/ui/searchInput";
-import { useTheme } from "next-themes";
 
 export const ListThemes = (props: {
   themes: ThemeWithSubThemes[];
@@ -44,6 +43,7 @@ export const ListThemes = (props: {
             name={theme.name}
             parentId={theme.parentId}
             description={theme.description}
+            order={theme.order}
           >
             <Collapsible>
               <CollapsibleTrigger asChild>
@@ -81,7 +81,9 @@ export const ListThemes = (props: {
               "font-bold text-2xl": !gridMod && theme.parentId === null,
               "text-xl": !gridMod && theme.parentId !== null,
               "active:text-primary": true,
-              "arrow-dark": theme.parentId !== null && colorTheme === "light",
+              "arrow-dark":
+                theme.parentId !== null &&
+                (colorTheme === "light" || !colorTheme),
               "arrow-white": theme.parentId !== null && colorTheme === "dark",
             })}
           >
@@ -103,6 +105,7 @@ export const ListThemes = (props: {
             name={theme.name}
             parentId={theme.parentId}
             description={theme.description}
+            order={theme.order}
           />
         );
       }
@@ -127,7 +130,9 @@ export const ListThemes = (props: {
               "font-bold text-2xl": !gridMod && theme.parentId === null,
               "text-xl": !gridMod && theme.parentId !== null,
               "active:text-primary": true,
-              "arrow-dark": theme.parentId !== null && colorTheme === "light",
+              "arrow-dark":
+                theme.parentId !== null &&
+                (colorTheme === "light" || !colorTheme),
               "arrow-white": theme.parentId !== null && colorTheme === "dark",
             })}
           >

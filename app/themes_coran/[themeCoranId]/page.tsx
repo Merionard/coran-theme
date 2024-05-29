@@ -81,9 +81,12 @@ export default async function ViewTheme({
               <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
             </div>
           )}
-          <div className="border p-10 w-2/3 mx-auto border-black">
-            <p>{theme.description}</p>
-          </div>
+          {theme.description && (
+            <div className="border p-10 w-2/3 mx-auto border-black">
+              <p>{theme.description}</p>
+            </div>
+          )}
+
           <div className="space-y-5 pt-5  p-3 md:p-6">
             {theme?.ayats.map((a) => (
               <AyatCard
