@@ -9,17 +9,6 @@ import { SearchInput } from "@/components/ui/searchInput";
 import { ChevronLeft, ChevronRight, Loader } from "lucide-react";
 import { useRef, useState } from "react";
 
-function useDebounce<T>(callBack: (...args: [T]) => void, time: number) {
-  const debounce = useRef<null | NodeJS.Timeout>(null);
-
-  return (...args: [T]) => {
-    if (debounce.current) {
-      clearTimeout(debounce.current);
-    }
-    debounce.current = setTimeout(() => callBack(...args), time);
-  };
-}
-
 type props = {
   ifSomeSearch: (is: boolean) => void;
 };
@@ -76,15 +65,9 @@ export const SearchAyat = ({ ifSomeSearch }: props) => {
     if (!searchTerm.trim()) {
       return <>{text}</>;
     }
-    const harakats = /[\u064B-\u0652]/g;
-    const textWithoutHarakat = text.replace(
-      /[\u064B-\u065F\u0670\u06D6-\u06ED]/g,
-      ""
-    );
-    const searhWithoutHarakats = searchTerm.replace(
-      /[\u064B-\u065F\u0670\u06D6-\u06ED]/g,
-      ""
-    );
+    const harakats = /[\u064B-\u065F\u0670\u06D6-\u06ED\u0671]/g;
+    const textWithoutHarakat = text.replace(harakats, "");
+    const searhWithoutHarakats = searchTerm.replace(harakats, "");
 
     const regex = new RegExp(`(${searhWithoutHarakats})`, "gi");
     const parts = textWithoutHarakat.split(regex);

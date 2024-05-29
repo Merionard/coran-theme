@@ -81,7 +81,7 @@ export default async function ViewTheme({
               <ThemeSearchAyat themeId={Number(params.themeCoranId)} />
             </div>
           )}
-          <div>
+          <div className="border p-10 w-2/3 mx-auto border-black">
             <p>{theme.description}</p>
           </div>
           <div className="space-y-5 pt-5  p-3 md:p-6">
@@ -98,7 +98,9 @@ export default async function ViewTheme({
         </div>
         {theme.subThemes.length > 0 && (
           <div>
-            <hr className="mx-auto w-3/4 border-2 border-black" />
+            {theme.ayats.length > 0 && (
+              <hr className="mx-auto w-3/4 border-2 border-black" />
+            )}
             <h3 className="text-center text-4xl my-3">Sous thèmes</h3>
             {theme?.subThemes.map((subTheme) => (
               <Link

@@ -66,6 +66,7 @@ export function ThemeDialogForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       themeName: theme ? theme.name : "",
+      description: theme && theme.description !== null ? theme.description : "",
     },
   });
 
