@@ -20,10 +20,19 @@ type props = {
   ayat: ayat;
   index: number;
   totalAyats: number;
+  transcript: string;
+  listening: boolean;
+  resetTranscript: () => void;
 };
 
-export const ExoCard = ({ ayat, index, totalAyats }: props) => {
-  const { transcript, listening, resetTranscript } = useSpeechRecognition();
+export const ExoCard = ({
+  ayat,
+  index,
+  totalAyats,
+  listening,
+  resetTranscript,
+  transcript,
+}: props) => {
   const [message, setMessage] = useState("");
 
   const reset = () => {
