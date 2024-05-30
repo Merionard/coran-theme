@@ -2,10 +2,19 @@
 
 import { Button } from "@/components/ui/button";
 import { ayat } from "@prisma/client";
+import { Check, Disc, Play, RotateCcw } from "lucide-react";
 import { useRef, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
 
 type props = {
   ayats: ayat[];
@@ -42,34 +51,64 @@ export const ExoOral = ({ ayats }: props) => {
   const startListening = () => {
     SpeechRecognition.startListening({ language: "ar-SA" });
   };
-
-  const intervalRef = useRef<number | null>(null);
-
-  const handleMouseDown = () => {
-    startListening(); // Appelle immédiatement au premier clic
-    //intervalRef.current = window.setInterval(startListening, 1000); // Appelle startListening toutes les secondes
-  };
-
-  const handleMouseUp = () => {
-    if (intervalRef.current !== null) {
-      clearInterval(intervalRef.current);
+  const validate = () => {
+    const harakats = /[\u064B-\u065F\u0670\u06D6-\u06ED\u0671]/g;
+    const ayatWhitoutHarakts = ayats[0].content.replace(harakats, "");
+    if (transcript === ayatWhitoutHarakts) {
+      setMessage("GG");
+    } else {
+      setMessage("oups");
     }
   };
 
   return (
     <div>
-      <div className="flex justify-end gap-3">
-        <Button onMouseDown={handleMouseDown}>
-          {!listening ? "start" : "record"}
-        </Button>
-        <Button onClick={SpeechRecognition.stopListening}>Stop</Button>
-        <Button onClick={reset}>Reset</Button>
-      </div>
-      <p>Traduisez la phrase ci-desous:</p>
-      <p>{ayats[0].traduction}</p>
+      <Carousel className="w-full">
+        <CarouselContent>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <CarouselItem key={index}>
+              <div className="p-1">
+                <Card>
+                  <CardContent className="p-5">
+                    <div className="flex justify-end gap-3">
+                      <Button onMouseDown={startListening} size={"icon"}>
+                        {!listening ? <Play /> : <Disc />}
+                      </Button>
+                      <Button onClick={reset} size={"icon"}>
+                        <RotateCcw />
+                      </Button>
+                    </div>
+                    <div className="flex justify-center mb-3">
+                      <p className="text-xl font-bold">
+                        Traduisez la phrase ci-desous
+                      </p>
+                    </div>
+                    <div className="space-y-3">
+                      <p className="text-center">{ayats[0].traduction}</p>
+                      <hr className="w-1/2 mx-auto" />
+                      <p className="text-center font-bold">Votre traduction</p>
+                      <p className="text-3xl text-center">{transcript}</p>
+                      <div className="flex justify-end">
+                        <Button
+                          onClick={validate}
+                          disabled={message.length > 0}
+                        >
+                          Valider
+                          <Check />
+                        </Button>
+                      </div>
+                    </div>
 
-      <p>{transcript}</p>
-      <p>{message}</p>
+                    <p>{message}</p>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 };
