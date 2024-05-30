@@ -37,6 +37,11 @@ export const Navbar = () => {
       url: "/mes_themes",
       needSession: true,
     },
+    {
+      name: "revisions",
+      url: "/revisions",
+      needSession: true,
+    },
   ];
 
   return (
