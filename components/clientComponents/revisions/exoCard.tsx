@@ -46,7 +46,6 @@ export const ExoCard = ({
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
     const score = stringSimilarity(ayatWhitoutHarakts, transcript);
-    alert(score);
     if (score > 0.9) {
       setMessage("BRAVO!!");
     } else {

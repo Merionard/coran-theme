@@ -1,12 +1,9 @@
-import { Card, CardContent } from "@/components/ui/card";
+import { AyatCoran } from "@/components/clientComponents/ayat/ayatCoran";
+import { CardContent } from "@/components/ui/card";
+import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
-import {
-  Amiri,
-  Cairo,
-  Inter,
-  Noto_Sans_Arabic,
-  Roboto,
-} from "next/font/google";
+import { ayat } from "@prisma/client";
+import { Noto_Sans_Arabic } from "next/font/google";
 
 const note = Noto_Sans_Arabic({ weight: "400", subsets: ["arabic"] });
 
@@ -24,12 +21,21 @@ export default async function SouratePage({
     orderBy: { number: "asc" },
   });
 
+  const session = await getAuthSession();
+  const user = await prisma.user.findFirst({
+    where: { id: session?.user.id },
+    include: { myAyats: true, myThemes: true },
+  });
+  const isAyatFavorite = (ayat: ayat) => {
+    if (!session) return false;
+    if (user) return user.myAyats.some((a) => a.id === ayat.id);
+    return false;
+  };
+
   return (
     <div>
-      <h2 className={note.className + " text-4xl text-center"}>
-        {ayats[0].sourate.titre}
-      </h2>
-      <h3 className={note.className + " text-4xl text-center mt-5"}>
+      <h2 className={"text-4xl text-center"}>{ayats[0].sourate.titre}</h2>
+      <h3 className={"text-4xl text-center mt-5"}>
         بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ
       </h3>
       <div className="pt-5">
@@ -39,15 +45,7 @@ export default async function SouratePage({
               (a) => a.content !== "بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ"
             )
             .map((a) => (
-              <div key={a.id} className="border-b-2 space-y-3 bg-card">
-                <div className="rounded-full border  flex items-center justify-center w-4 h-4 p-4">
-                  {a.number}
-                </div>
-                <p className={note.className + " text-2xl text-right"}>
-                  {a.content}
-                </p>
-                <p>{a.traduction}</p>
-              </div>
+              <AyatCoran ayat={a} isFavorite={isAyatFavorite(a)} key={a.id} />
             ))}
         </CardContent>
       </div>
