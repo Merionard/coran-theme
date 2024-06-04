@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
 import { Play, Disc, RotateCcw, Check } from "lucide-react";
 import { useState } from "react";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+import SpeechRecognition from "react-speech-recognition";
+import { stringSimilarity } from "string-similarity-js";
 
 type props = {
   ayat: ayat;
@@ -44,12 +44,13 @@ export const ExoCard = ({
     SpeechRecognition.startListening({ language: "ar-SA" });
   };
   const validate = () => {
-    const harakats = /[\u064B-\u065F\u0670\u06D6-\u06ED\u0671]/g;
-    const ayatWhitoutHarakts = ayat.content.replace(harakats, "");
-    if (transcript === ayatWhitoutHarakts) {
+    const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
+    const score = stringSimilarity(ayatWhitoutHarakts, transcript);
+    alert(score);
+    if (score > 0.9) {
       setMessage("BRAVO!!");
     } else {
-      setMessage("Ce n'est pas parfait vérifie avec la correction!");
+      setMessage("Concordance insuffisante");
     }
   };
   return (
@@ -81,7 +82,15 @@ export const ExoCard = ({
               <>
                 <hr className="w-1/2 mx-auto" />
                 <p className="text-center font-bold">Résultat</p>
-                <p className="text-center text-primary">{message}</p>
+                <p
+                  className={cn(
+                    "text-center",
+                    { "text-primary": message === "BRAVO!!" },
+                    { "text-destructive": message !== "BRAVO!!" }
+                  )}
+                >
+                  {message}
+                </p>
               </>
             )}
 
