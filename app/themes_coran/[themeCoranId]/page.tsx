@@ -81,7 +81,7 @@ export default async function ViewTheme({
             </div>
           )}
           {theme.description && (
-            <div className="border p-10 w-2/3 mx-auto border-black">
+            <div className="border p-3 md:p-10 md:w-2/3 mx-auto border-black">
               <p>{theme.description}</p>
             </div>
           )}

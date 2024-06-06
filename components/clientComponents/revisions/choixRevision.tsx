@@ -15,7 +15,7 @@ export const ChoixRevision = ({ ayatsToLearn, myAyats }: props) => {
   const [ayats, setAyats] = useState<ayat[]>([]);
   return (
     <div>
-      <div className="flex justify-end gap-2 mb-3">
+      <div className="flex flex-col md:flex-row justify-end gap-2 mb-3">
         <Button onClick={() => setAyats(myAyats)}>Réviser mes favoris</Button>
         <Button onClick={() => setAyats(ayatsToLearn)}>
           Réviser les Ayats à apprendre
