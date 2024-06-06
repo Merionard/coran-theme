@@ -38,10 +38,10 @@ export const ExoCard = ({
   const stopSoundRef = useRef<HTMLAudioElement>(null);
 
   useEffect(() => {
-    if (!listening && stopSoundRef.current) {
+    if (!listening && stopSoundRef.current && transcript.length > 0) {
       stopSoundRef.current.play();
     }
-  }, [listening]);
+  }, [listening, transcript]);
 
   const reset = () => {
     resetTranscript();

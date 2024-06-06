@@ -1,21 +1,20 @@
+import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
+import { FavorisBtn } from "@/components/clientComponents/favoris/favorisBtn";
+import { DeleteThemeBtn } from "@/components/clientComponents/theme/deleteThemeBtn";
+import { toogleFavoriteTheme } from "@/components/serverActions/favorisAction";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
+import { ayat } from "@prisma/client";
+import { MessageCircleWarning, Undo2 } from "lucide-react";
+import Link from "next/link";
 import { ThemeDialogForm } from "../../../components/clientComponents/theme/newThemeDialogForm";
 import {
   createNewThemeCoran,
   updateTheme,
 } from "../../../components/serverActions/themeCoranAction";
-import Link from "next/link";
 import ThemeSearchAyat from "../../../components/serverComponents/ThemeSearchAyat";
-import { AyatCard } from "@/components/clientComponents/ayat/ayatCard";
-import { getAuthSession } from "@/lib/auth";
-import { ayat } from "@prisma/client";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { MessageCircleWarning, Pencil, Trash, Undo2 } from "lucide-react";
-import { DeleteThemeBtn } from "@/components/clientComponents/theme/deleteThemeBtn";
-import { FavorisBtn } from "@/components/clientComponents/favoris/favorisBtn";
-import { toogleFavoriteTheme } from "@/components/serverActions/favorisAction";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export default async function ViewTheme({
   params,

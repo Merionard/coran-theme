@@ -1,3 +1,4 @@
+import { ChoixRevision } from "@/components/clientComponents/revisions/choixRevision";
 import { ExoCaroussel } from "@/components/clientComponents/revisions/exoCaroussel";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { getAuthSession } from "@/lib/auth";
@@ -21,6 +22,7 @@ export default async function Revisions() {
     where: { id: session.user.id },
     include: { myAyats: true },
   });
+  const ayatsToLearn = await prisma.ayat.findMany({ where: { toLearn: true } });
   if (!userData) {
     return (
       <Alert>
@@ -34,7 +36,9 @@ export default async function Revisions() {
   const shuffledAyats = userData.myAyats.sort(() => 0.5 - Math.random());
   // Limiter à 5 éléments
   const limitedAyats = shuffledAyats.slice(0, 5);
-  userData.myAyats = limitedAyats;
+  //userData.myAyats = limitedAyats;
 
-  return <ExoCaroussel ayats={limitedAyats} />;
+  return (
+    <ChoixRevision ayatsToLearn={ayatsToLearn} myAyats={userData.myAyats} />
+  );
 }
