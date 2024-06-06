@@ -40,9 +40,14 @@ export const ExoCard = ({
     resetTranscript();
     setMessage("");
   };
+  useEffect(() => {
+    if (!listening && transcript.length > 0) {
+      stopSound.play();
+    }
+  }, [listening, transcript, stopSound]);
 
   const startListening = () => {
-    SpeechRecognition.startListening({ language: "ar-SA", continuous: true });
+    SpeechRecognition.startListening({ language: "ar-SA" });
   };
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
@@ -73,9 +78,6 @@ export const ExoCard = ({
                 ) : (
                   <Disc className="text-red-500 animate-pulse" />
                 )}
-              </Button>
-              <Button onClick={stopListening} size={"icon"} variant={"ghost"}>
-                <StopCircle />
               </Button>
               <Button onClick={reset} size={"icon"} variant={"ghost"}>
                 <RotateCcw />
