@@ -11,7 +11,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
-import { Play, Disc, RotateCcw, Check } from "lucide-react";
+import { Play, Disc, RotateCcw, Check, StopCircle } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import SpeechRecognition from "react-speech-recognition";
 import { stringSimilarity } from "string-similarity-js";
@@ -34,15 +34,7 @@ export const ExoCard = ({
   transcript,
 }: props) => {
   const [message, setMessage] = useState("");
-
-  const startSound = new Audio("/sounds/game-start-6104.mp3");
   const stopSound = useMemo(() => new Audio("/sounds/stop-13692.mp3"), []);
-
-  useEffect(() => {
-    if (!listening && transcript.length > 0) {
-      stopSound.play();
-    }
-  }, [listening, transcript, stopSound]);
 
   const reset = () => {
     resetTranscript();
@@ -50,9 +42,7 @@ export const ExoCard = ({
   };
 
   const startListening = () => {
-    startSound.play();
-
-    SpeechRecognition.startListening({ language: "ar-SA" });
+    SpeechRecognition.startListening({ language: "ar-SA", continuous: true });
   };
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
@@ -62,6 +52,11 @@ export const ExoCard = ({
     } else {
       setMessage("Concordance insuffisante");
     }
+  };
+
+  const stopListening = () => {
+    stopSound.play();
+    SpeechRecognition.stopListening();
   };
   return (
     <div className="p-1 space-y-3">
@@ -78,6 +73,9 @@ export const ExoCard = ({
                 ) : (
                   <Disc className="text-red-500 animate-pulse" />
                 )}
+              </Button>
+              <Button onClick={stopListening} size={"icon"} variant={"ghost"}>
+                <StopCircle />
               </Button>
               <Button onClick={reset} size={"icon"} variant={"ghost"}>
                 <RotateCcw />
