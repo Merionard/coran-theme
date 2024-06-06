@@ -12,7 +12,7 @@ import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
 import { Play, Disc, RotateCcw, Check } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import SpeechRecognition from "react-speech-recognition";
 import { stringSimilarity } from "string-similarity-js";
 
@@ -34,6 +34,14 @@ export const ExoCard = ({
   transcript,
 }: props) => {
   const [message, setMessage] = useState("");
+  const startSoundRef = useRef<HTMLAudioElement>(null);
+  const stopSoundRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (!listening && stopSoundRef.current) {
+      stopSoundRef.current.play();
+    }
+  }, [listening]);
 
   const reset = () => {
     resetTranscript();
@@ -41,6 +49,9 @@ export const ExoCard = ({
   };
 
   const startListening = () => {
+    if (startSoundRef.current) {
+      startSoundRef.current.play();
+    }
     SpeechRecognition.startListening({ language: "ar-SA" });
   };
   const validate = () => {
@@ -54,6 +65,8 @@ export const ExoCard = ({
   };
   return (
     <div className="p-1 space-y-3">
+      <audio ref={startSoundRef} src="/sounds/game-start-6104.mp3" />
+      <audio ref={stopSoundRef} src="/sounds/stop-13692.mp3" />
       <Card>
         <CardContent className="p-5">
           <div className="flex justify-between gap-3">
@@ -61,10 +74,18 @@ export const ExoCard = ({
               {index}/{totalAyats}
             </p>
             <div className="flex gap-2">
-              <Button onMouseDown={startListening} size={"icon"}>
-                {!listening ? <Play /> : <Disc />}
+              <Button
+                onMouseDown={startListening}
+                size={"icon"}
+                variant={"ghost"}
+              >
+                {!listening ? (
+                  <Play />
+                ) : (
+                  <Disc className="text-red-500 animate-pulse" />
+                )}
               </Button>
-              <Button onClick={reset} size={"icon"}>
+              <Button onClick={reset} size={"icon"} variant={"ghost"}>
                 <RotateCcw />
               </Button>
             </div>

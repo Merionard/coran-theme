@@ -96,6 +96,7 @@ model ayat {
   traduction String?
   theme      theme[]  @relation("AyatThemes")
   users      User[] @relation("UserAyats")
+  toLearn    Boolean @default(false)
 }
 
 
