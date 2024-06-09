@@ -70,6 +70,8 @@ export const ExoCaroussel = ({ ayats }: props) => {
           size={"lg"}
           onMouseDown={startListening}
           onMouseUp={stopListening}
+          onTouchStart={startListening}
+          onTouchEnd={stopListening}
           className="active:bg-white rounded-full"
         >
           <Disc className={cn({ "text-black": recording })} />
