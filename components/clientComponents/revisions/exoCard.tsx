@@ -34,21 +34,12 @@ export const ExoCard = ({
   transcript,
 }: props) => {
   const [message, setMessage] = useState("");
-  const stopSound = useMemo(() => new Audio("/sounds/stop-13692.mp3"), []);
 
   const reset = () => {
     resetTranscript();
     setMessage("");
   };
-  useEffect(() => {
-    if (!listening && transcript.length > 0) {
-      stopSound.play();
-    }
-  }, [listening, transcript, stopSound]);
 
-  const startListening = () => {
-    SpeechRecognition.startListening({ language: "ar-SA" });
-  };
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
     const score = stringSimilarity(ayatWhitoutHarakts, transcript);
@@ -59,10 +50,6 @@ export const ExoCard = ({
     }
   };
 
-  const stopListening = () => {
-    stopSound.play();
-    SpeechRecognition.stopListening();
-  };
   return (
     <div className="p-1 space-y-3">
       <Card>
@@ -72,13 +59,6 @@ export const ExoCard = ({
               {index}/{totalAyats}
             </p>
             <div className="flex gap-2">
-              <Button onClick={startListening} size={"icon"} variant={"ghost"}>
-                {!listening ? (
-                  <Play />
-                ) : (
-                  <Disc className="text-red-500 animate-pulse" />
-                )}
-              </Button>
               <Button onClick={reset} size={"icon"} variant={"ghost"}>
                 <RotateCcw />
               </Button>
