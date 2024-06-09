@@ -64,7 +64,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext />
       </Carousel>
 
-      <div className="mt-10 flex justify-center">
+      <div className="mt-28 flex justify-center">
         <Button
           variant={"destructive"}
           size={"lg"}
