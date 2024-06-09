@@ -64,15 +64,17 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext />
       </Carousel>
 
-      <Button
-        variant={"destructive"}
-        size={"lg"}
-        onMouseDown={startListening}
-        onMouseUp={stopListening}
-        className="active:bg-white fixed bottom-10 left-1/2 transform -translate-x-1/2 mb-4 rounded-full"
-      >
-        <Disc className={cn({ "text-black": recording })} />
-      </Button>
+      <div className="mt-10 flex justify-center">
+        <Button
+          variant={"destructive"}
+          size={"lg"}
+          onMouseDown={startListening}
+          onMouseUp={stopListening}
+          className="active:bg-white rounded-full"
+        >
+          <Disc className={cn({ "text-black": recording })} />
+        </Button>
+      </div>
     </div>
   );
 };

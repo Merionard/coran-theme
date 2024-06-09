@@ -11,9 +11,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
-import { Play, Disc, RotateCcw, Check, StopCircle } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
-import SpeechRecognition from "react-speech-recognition";
+import { Check, RotateCcw } from "lucide-react";
+import { useState } from "react";
 import { stringSimilarity } from "string-similarity-js";
 
 type props = {
@@ -43,7 +42,7 @@ export const ExoCard = ({
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
     const score = stringSimilarity(ayatWhitoutHarakts, transcript);
-    if (score > 0.9) {
+    if (score > 0.88) {
       setMessage("BRAVO!!");
     } else {
       setMessage("Concordance insuffisante");
