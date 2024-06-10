@@ -44,7 +44,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
     setRecording(false);
   };
   return (
-    <div className="relative">
+    <div className="relative mx-auto">
       <Carousel className="w-full" setApi={setApi}>
         <CarouselContent>
           {ayats.map((a, index) => (
@@ -64,15 +64,15 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext />
       </Carousel>
 
-      <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2">
+      <div className="fixed bottom-20  flex justify-center w-4/5 left-1/2 transform -translate-x-1/2 ">
         <Button
           variant={"destructive"}
-          size={"lg"}
+          size={"icon"}
           onMouseDown={startListening}
           onMouseUp={stopListening}
           onTouchStart={startListening}
           onTouchEnd={stopListening}
-          className="active:bg-white rounded-full"
+          className="active:bg-white  opacity-30"
         >
           <Disc className={cn({ "text-black": recording })} />
         </Button>
