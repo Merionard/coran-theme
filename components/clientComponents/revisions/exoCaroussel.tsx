@@ -44,7 +44,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
     setRecording(false);
   };
   return (
-    <div>
+    <div className="relative">
       <Carousel className="w-full" setApi={setApi}>
         <CarouselContent>
           {ayats.map((a, index) => (
@@ -64,7 +64,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext />
       </Carousel>
 
-      <div className="mt-28 flex justify-center">
+      <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2">
         <Button
           variant={"destructive"}
           size={"lg"}
