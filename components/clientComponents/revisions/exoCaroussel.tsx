@@ -60,11 +60,11 @@ export const ExoCaroussel = ({ ayats }: props) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        <CarouselPrevious className="hidden md:flex" />
+        <CarouselNext className="hidden md:flex" />
       </Carousel>
 
-      <div className="fixed bottom-20  flex justify-center w-4/5 left-1/2 transform -translate-x-1/2 ">
+      <div className="fixed bottom-20   left-1/2 transform -translate-x-1/2 ">
         <Button
           variant={"destructive"}
           size={"icon"}
@@ -72,7 +72,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
           onMouseUp={stopListening}
           onTouchStart={startListening}
           onTouchEnd={stopListening}
-          className="active:bg-white  opacity-30"
+          className="active:bg-white  opacity-30 rounded-full"
         >
           <Disc className={cn({ "text-black": recording })} />
         </Button>
