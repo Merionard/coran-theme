@@ -11,9 +11,10 @@ import { Card, CardContent } from "@/components/ui/card";
 import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
-import { Check, RotateCcw } from "lucide-react";
-import { useState } from "react";
+import { Check, Disc, RotateCcw } from "lucide-react";
+import { useMemo, useState } from "react";
 import { stringSimilarity } from "string-similarity-js";
+import SpeechRecognition from "react-speech-recognition";
 
 type props = {
   ayat: ayat;
@@ -31,7 +32,7 @@ export const ExoCard = ({
   transcript,
 }: props) => {
   const [message, setMessage] = useState("");
-
+  const startSound = useMemo(() => new Audio("/sounds/stop-13692.mp3"), []);
   const reset = () => {
     resetTranscript();
     setMessage("");
@@ -45,6 +46,23 @@ export const ExoCard = ({
     } else {
       setMessage("Concordance insuffisante");
     }
+  };
+  const startListening = (
+    event:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    startSound.play();
+    SpeechRecognition.startListening({ language: "ar-SA", continuous: true });
+  };
+  const stopListening = (
+    event:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+    SpeechRecognition.stopListening();
   };
 
   return (
@@ -85,7 +103,18 @@ export const ExoCard = ({
               </>
             )}
 
-            <div className="flex justify-end ">
+            <div className="flex justify-between ">
+              <Button
+                variant={"destructive"}
+                size={"icon"}
+                onMouseDown={(e) => startListening(e)}
+                onMouseUp={(e) => stopListening(e)}
+                onTouchStart={(e) => startListening(e)}
+                onTouchEnd={(e) => stopListening(e)}
+                className="active:bg-white  opacity-30 rounded-full"
+              >
+                <Disc />
+              </Button>
               <Button onClick={validate} disabled={message.length > 0}>
                 Valider
                 <Check />
