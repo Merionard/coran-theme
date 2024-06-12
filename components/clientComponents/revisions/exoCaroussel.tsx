@@ -39,7 +39,6 @@ export const ExoCaroussel = ({ ayats }: props) => {
       | React.MouseEvent<HTMLButtonElement>
   ) => {
     event.preventDefault();
-    startSound.play();
     SpeechRecognition.startListening({ language: "ar-SA", continuous: true });
   };
   const stopListening = (
