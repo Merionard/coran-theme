@@ -33,11 +33,21 @@ export const ExoCaroussel = ({ ayats }: props) => {
       resetTranscript();
     });
   }, [api, transcript, resetTranscript]);
-  const startListening = () => {
+  const startListening = (
+    event:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     startSound.play();
     SpeechRecognition.startListening({ language: "ar-SA", continuous: true });
   };
-  const stopListening = () => {
+  const stopListening = (
+    event:
+      | React.TouchEvent<HTMLButtonElement>
+      | React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
     SpeechRecognition.stopListening();
   };
   return (
@@ -64,8 +74,10 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <Button
           variant={"destructive"}
           size={"icon"}
-          onTouchStart={startListening}
-          onTouchEnd={stopListening}
+          onMouseDown={(e) => startListening(e)}
+          onMouseUp={(e) => stopListening(e)}
+          onTouchStart={(e) => startListening(e)}
+          onTouchEnd={(e) => stopListening(e)}
           className="active:bg-white  opacity-30 rounded-full"
         >
           <Disc />
