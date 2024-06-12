@@ -20,7 +20,6 @@ type props = {
   index: number;
   totalAyats: number;
   transcript: string;
-  listening: boolean;
   resetTranscript: () => void;
 };
 
@@ -28,7 +27,6 @@ export const ExoCard = ({
   ayat,
   index,
   totalAyats,
-  listening,
   resetTranscript,
   transcript,
 }: props) => {
