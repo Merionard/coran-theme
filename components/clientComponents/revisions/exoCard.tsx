@@ -15,6 +15,7 @@ import { ayat } from "@prisma/client";
 import { Check, RotateCcw } from "lucide-react";
 import { ChangeEvent, useEffect, useState } from "react";
 import { stringSimilarity } from "string-similarity-js";
+import SpeechRecognition from "react-speech-recognition";
 
 type props = {
   ayat: ayat;
@@ -45,6 +46,7 @@ export const ExoCard = ({
   };
 
   const validate = () => {
+    SpeechRecognition.stopListening();
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
     const score = stringSimilarity(ayatWhitoutHarakts, value);
     if (score > 0.88) {
