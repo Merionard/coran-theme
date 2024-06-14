@@ -42,11 +42,17 @@ export default async function ViewTheme({
   const session = await getAuthSession();
   const user = await prisma.user.findFirst({
     where: { id: session?.user.id },
-    include: { myAyats: true, myThemes: true },
+    include: { myAyats: true, myThemes: true, ayatsLearned: true },
   });
   const isAyatFavorite = (ayat: ayat) => {
     if (!session) return false;
     if (user) return user.myAyats.some((a) => a.id === ayat.id);
+    return false;
+  };
+
+  const isAyatLearned = (ayat: ayat) => {
+    if (!session) return false;
+    if (user) return user.ayatsLearned.some((a) => a.id === ayat.id);
     return false;
   };
 
@@ -94,6 +100,7 @@ export default async function ViewTheme({
                 titreSourate={a.sourate.titre}
                 themeId={theme.id}
                 isFavorite={isAyatFavorite(a)}
+                isLearned={isAyatLearned(a)}
               />
             ))}
           </div>

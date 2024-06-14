@@ -10,8 +10,13 @@ import { RocketIcon } from "lucide-react";
 type props = {
   myAyats: ayat[];
   ayatsToLearn: ayat[];
+  randomLearnedAyat: ayat[];
 };
-export const ChoixRevision = ({ ayatsToLearn, myAyats }: props) => {
+export const ChoixRevision = ({
+  ayatsToLearn,
+  myAyats,
+  randomLearnedAyat,
+}: props) => {
   const [ayats, setAyats] = useState<ayat[]>([]);
   return (
     <div>
@@ -19,6 +24,9 @@ export const ChoixRevision = ({ ayatsToLearn, myAyats }: props) => {
         <Button onClick={() => setAyats(myAyats)}>Réviser mes favoris</Button>
         <Button onClick={() => setAyats(ayatsToLearn)}>
           Réviser les Ayats à apprendre
+        </Button>
+        <Button onClick={() => setAyats(randomLearnedAyat)}>
+          Réviser aléatoirement mes ayats apprises
         </Button>
       </div>
       {ayats.length === 0 && (

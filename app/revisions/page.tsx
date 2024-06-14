@@ -20,7 +20,7 @@ export default async function Revisions() {
   }
   const userData = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: { myAyats: true },
+    include: { myAyats: true, ayatsLearned: true },
   });
   const ayatsToLearn = await prisma.ayat.findMany({ where: { toLearn: true } });
   if (!userData) {
@@ -33,12 +33,19 @@ export default async function Revisions() {
     );
   }
   // Mélanger les myAyats aléatoirement
-  const shuffledAyats = userData.myAyats.sort(() => 0.5 - Math.random());
+  const shuffleFavoriteAyat = userData.myAyats.sort(() => 0.5 - Math.random());
+  const shufflelearnedAyat = userData.ayatsLearned.sort(
+    () => 0.5 - Math.random()
+  );
   // Limiter à 5 éléments
-  const limitedAyats = shuffledAyats.slice(0, 5);
+  const limitedAyats = shufflelearnedAyat.slice(0, 5);
   //userData.myAyats = limitedAyats;
 
   return (
-    <ChoixRevision ayatsToLearn={ayatsToLearn} myAyats={userData.myAyats} />
+    <ChoixRevision
+      ayatsToLearn={ayatsToLearn}
+      myAyats={shuffleFavoriteAyat}
+      randomLearnedAyat={limitedAyats}
+    />
   );
 }

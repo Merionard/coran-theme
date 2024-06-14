@@ -4,6 +4,7 @@ import { prisma } from "@/prisma/client";
 import { ayat } from "@prisma/client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MessageCircleWarning } from "lucide-react";
+import { FavorisPage } from "@/components/clientComponents/favoris/favorisPage";
 
 export default async function MyAyats() {
   const session = await getAuthSession();
@@ -21,42 +22,21 @@ export default async function MyAyats() {
   } else {
     const data = await prisma.user.findUnique({
       where: { id: session.user.id },
-      include: { myAyats: { include: { sourate: true, theme: true } } },
+      include: {
+        myAyats: { include: { sourate: true, theme: true } },
+        ayatsLearned: { include: { sourate: true, theme: true } },
+      },
     });
-
-    const isAyatFavorite = (ayat: ayat) => {
-      if (!session) return false;
-      if (data) return data.myAyats.some((a) => a.id === ayat.id);
-      return false;
-    };
 
     return (
       <div>
         <h2 className="text-center text-4xl md:text-6xl mb-5 md:mb-16">
           Mes Ayats
         </h2>
-        {data && data.myAyats.length > 0 ? (
-          <div className="space-y-5">
-            {data?.myAyats.map((ayat) => (
-              <AyatCard
-                ayat={ayat}
-                titreSourate={ayat.sourate.titre}
-                key={ayat.id}
-                isFavorite={isAyatFavorite(ayat)}
-                themes={ayat.theme}
-              />
-            ))}
-          </div>
-        ) : (
-          <Alert>
-            <MessageCircleWarning className="h-4 w-4" />
-
-            <AlertTitle>Oups</AlertTitle>
-            <AlertDescription>
-              Vous n&apos; avez pas encore de favoris!
-            </AlertDescription>
-          </Alert>
-        )}
+        <FavorisPage
+          favorisAyat={data ? data.myAyats : []}
+          learnedAyat={data ? data.ayatsLearned : []}
+        />
       </div>
     );
   }

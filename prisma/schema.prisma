@@ -23,6 +23,7 @@ model User {
   role UserRole @default(USER)
   myAyats   ayat[] @relation("UserAyats")
   myThemes  theme[] @relation("UserThemes")
+  ayatsLearned ayat[] @relation("AyatsLearned")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -96,6 +97,7 @@ model ayat {
   traduction String?
   theme      theme[]  @relation("AyatThemes")
   users      User[] @relation("UserAyats")
+  usersLearn User[] @relation("AyatsLearned")
   toLearn    Boolean @default(false)
 }
 

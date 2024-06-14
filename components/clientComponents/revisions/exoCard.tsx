@@ -8,11 +8,12 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { cleanTashkeel, cn } from "@/lib/utils";
 import { ayat } from "@prisma/client";
 
 import { Check, RotateCcw } from "lucide-react";
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { stringSimilarity } from "string-similarity-js";
 
 type props = {
@@ -31,21 +32,31 @@ export const ExoCard = ({
   transcript,
 }: props) => {
   const [message, setMessage] = useState("");
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    setValue(transcript);
+  }, [transcript]);
 
   const reset = () => {
     resetTranscript();
     setMessage("");
+    setValue("");
   };
 
   const validate = () => {
     const ayatWhitoutHarakts = cleanTashkeel(ayat.content);
-    const score = stringSimilarity(ayatWhitoutHarakts, transcript);
+    const score = stringSimilarity(ayatWhitoutHarakts, value);
     if (score > 0.88) {
       setMessage("BRAVO!!");
     } else {
       setMessage("Concordance insuffisante");
     }
   };
+
+  function handleChangeTranscript(e: ChangeEvent<HTMLTextAreaElement>): void {
+    setValue(e.target.value);
+  }
 
   return (
     <div className="p-1 space-y-3">
@@ -68,7 +79,11 @@ export const ExoCard = ({
             <p className="text-center">{ayat.traduction}</p>
             <hr className="w-1/2 mx-auto" />
             <p className="text-center font-bold">Votre traduction</p>
-            <p className="text-3xl text-center">{transcript}</p>
+            <Textarea
+              value={value}
+              onChange={(e) => handleChangeTranscript(e)}
+              className="text-3xl text-right"
+            />
             {message.length > 0 && (
               <>
                 <hr className="w-1/2 mx-auto" />

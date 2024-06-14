@@ -70,3 +70,17 @@ export const toogleFavoriteTheme = async (
     },
   });
 };
+
+export const markAsLearned = async (ayatId: number) => {
+  const session = await getAuthSession();
+  if (!session) {
+    throw new Error("Vous devez être connecté pour marquer en appris!");
+  }
+
+  return prisma.user.update({
+    where: { id: session.user.id },
+    data: {
+      ayatsLearned: { connect: { id: ayatId } },
+    },
+  });
+};

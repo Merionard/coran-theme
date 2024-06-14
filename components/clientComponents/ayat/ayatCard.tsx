@@ -1,6 +1,9 @@
 "use client";
 
-import { toogleFavoriteAyat } from "@/components/serverActions/favorisAction";
+import {
+  markAsLearned,
+  toogleFavoriteAyat,
+} from "@/components/serverActions/favorisAction";
 import { removeAyatOnTheme } from "@/components/serverActions/themeCoranAction";
 import {
   Accordion,
@@ -10,7 +13,7 @@ import {
 } from "@/components/ui/accordion";
 import { cn } from "@/lib/utils";
 import { ayat, theme } from "@prisma/client";
-import { Heart, Trash } from "lucide-react";
+import { BookCheck, Check, Heart, Trash } from "lucide-react";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -22,6 +25,7 @@ export const AyatCard = (props: {
   themeId?: number;
   isFavorite: boolean;
   themes?: theme[];
+  isLearned: boolean;
 }) => {
   const router = useRouter();
   const session = useSession();
@@ -41,6 +45,16 @@ export const AyatCard = (props: {
     try {
       await toogleFavoriteAyat(props.ayat.id, props.isFavorite);
       toast.success("Favoris mis à jour avec succès!");
+      router.refresh();
+    } catch (error: any) {
+      toast.error(error.message);
+    }
+  };
+
+  const learnAction = async () => {
+    try {
+      await markAsLearned(props.ayat.id);
+      toast.success("Marqué comme apprise avec succès!");
       router.refresh();
     } catch (error: any) {
       toast.error(error.message);
@@ -77,6 +91,20 @@ export const AyatCard = (props: {
               />
             </button>
           )}
+          {session && session.data && props.isFavorite && (
+            <button
+              className={cn(
+                "flex justify-center items-center rounded-full border p-2"
+              )}
+              onClick={learnAction}
+            >
+              <BookCheck
+                className={cn("h-4 w-4", {
+                  "text-green-500 ": props.isLearned,
+                })}
+              />
+            </button>
+          )}
         </div>
       </div>
       {props.themes && (
@@ -89,8 +117,6 @@ export const AyatCard = (props: {
           ))}
         </div>
       )}
-      {}
-
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className=" text-3xl">
