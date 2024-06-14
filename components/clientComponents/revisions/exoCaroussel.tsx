@@ -70,7 +70,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext className="hidden md:flex" />
       </Carousel>
 
-      <div className="flex justify-center mt-10">
+      <div className="flex justify-center mt-3">
         {!listening ? (
           <Button
             variant={"default"}
