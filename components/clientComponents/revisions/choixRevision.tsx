@@ -20,15 +20,6 @@ export const ChoixRevision = ({
   const [ayats, setAyats] = useState<ayat[]>([]);
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-end gap-2 mb-3">
-        <Button onClick={() => setAyats(myAyats)}>Réviser mes favoris</Button>
-        <Button onClick={() => setAyats(ayatsToLearn)}>
-          Réviser les Ayats à apprendre
-        </Button>
-        <Button onClick={() => setAyats(randomLearnedAyat)}>
-          Réviser aléatoirement mes ayats apprises
-        </Button>
-      </div>
       {ayats.length === 0 && (
         <Alert>
           <RocketIcon className="h-4 w-4" />
@@ -39,6 +30,26 @@ export const ChoixRevision = ({
           </AlertDescription>
         </Alert>
       )}
+      <div className="flex flex-col  justify-center gap-2 mb-3 mt-3">
+        {ayats.length === 0 ? (
+          <>
+            <Button onClick={() => setAyats(myAyats)}>
+              Réviser mes favoris
+            </Button>
+            <Button onClick={() => setAyats(ayatsToLearn)}>
+              Réviser les Ayats à apprendre
+            </Button>
+            <Button onClick={() => setAyats(randomLearnedAyat)}>
+              Réviser aléatoirement mes ayats apprises
+            </Button>
+          </>
+        ) : (
+          <Button onClick={() => setAyats([])} variant={"secondary"}>
+            Retour choix exercices
+          </Button>
+        )}
+      </div>
+
       {ayats.length > 0 && <ExoCaroussel ayats={ayats} />}
     </div>
   );

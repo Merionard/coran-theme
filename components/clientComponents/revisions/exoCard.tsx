@@ -84,7 +84,7 @@ export const ExoCard = ({
             <Textarea
               value={value}
               onChange={(e) => handleChangeTranscript(e)}
-              className="text-3xl text-right"
+              className="text-3xl text-right min-h-64"
             />
             {message.length > 0 && (
               <>

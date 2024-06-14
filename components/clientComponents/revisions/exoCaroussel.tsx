@@ -16,6 +16,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import { ExoCard } from "./exoCard";
+import { cn } from "@/lib/utils";
 
 type props = {
   ayats: ayat[];
@@ -69,13 +70,13 @@ export const ExoCaroussel = ({ ayats }: props) => {
         <CarouselNext className="hidden md:flex" />
       </Carousel>
 
-      <div className="fixed bottom-20   left-1/2 transform -translate-x-1/2 ">
+      <div className="flex justify-center mt-10">
         {!listening ? (
           <Button
             variant={"default"}
             size={"icon"}
             onClick={startListening}
-            className="active:bg-white  opacity-30 rounded-full"
+            className="rounded-full"
           >
             <Disc />
           </Button>
@@ -84,7 +85,7 @@ export const ExoCaroussel = ({ ayats }: props) => {
             variant={"destructive"}
             size={"icon"}
             onClick={stopListening}
-            className="active:bg-white  opacity-30 rounded-full"
+            className={cn("rounded-full", { "animate-pulse": listening })}
           >
             <StopCircle />
           </Button>
