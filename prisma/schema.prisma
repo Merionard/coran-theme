@@ -117,3 +117,39 @@ model quran {
   id         Int     @id @default(autoincrement())
   traduction String?
 }
+
+model hadithBook {
+  id  Int @id
+  length Int
+  title String
+  author String
+  introduction String
+  titleTraductionEn String
+  authorTraductionEn String
+  introductionTraductionEn String
+  titleTraductionFr String?
+  authorTraductionFr String?
+  introductionTraductionFr String?
+  chapters hadithChapter[]
+}
+
+model hadithChapter {
+  id Int @id @default(autoincrement())
+  hadith_book_id    Int 
+  hadithBook hadithBook @relation(fields:[hadith_book_id],references:[id])
+  title String
+  titleEn String
+  titleFr String?
+  hadiths hadith[]
+}
+
+model hadith {
+id Int @id @default(autoincrement())
+hadith_chapter Int
+hadithChapter hadithChapter @relation(fields:[hadith_chapter],references:[id])
+content String
+traductionEn String
+traductionFr String?
+narratorEn String
+narratorFr String?
+}
