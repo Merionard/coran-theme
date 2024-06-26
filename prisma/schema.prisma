@@ -24,6 +24,8 @@ model User {
   myAyats   ayat[] @relation("UserAyats")
   myThemes  theme[] @relation("UserThemes")
   ayatsLearned ayat[] @relation("AyatsLearned")
+  myHadiths   hadith[] @relation("UserHadiths")
+  hadithsLearned hadith[] @relation("hadithsLearned")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -152,4 +154,6 @@ traductionEn String
 traductionFr String?
 narratorEn String
 narratorFr String?
+  users      User[] @relation("UserHadiths")
+  usersLearn User[] @relation("hadithsLearned")
 }

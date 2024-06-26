@@ -23,8 +23,8 @@ export const Navbar = () => {
       needSession: false,
     },
     {
-      name: "thèmes hadith",
-      url: "/themes_hadith",
+      name: "hadith",
+      url: "/hadith",
       needSession: false,
     },
     {
