@@ -20,7 +20,12 @@ export default async function Revisions() {
   }
   const userData = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: { myAyats: true, ayatsLearned: true },
+    include: {
+      myAyats: true,
+      ayatsLearned: true,
+      hadithsLearned: true,
+      myHadiths: true,
+    },
   });
   const ayatsToLearn = await prisma.ayat.findMany({ where: { toLearn: true } });
   if (!userData) {
@@ -46,6 +51,8 @@ export default async function Revisions() {
       ayatsToLearn={ayatsToLearn}
       myAyats={shuffleFavoriteAyat}
       randomLearnedAyat={limitedAyats}
+      myHadith={[]}
+      randomHadithLearned={[]}
     />
   );
 }

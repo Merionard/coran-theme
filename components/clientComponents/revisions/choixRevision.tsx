@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ayat } from "@prisma/client";
+import { ayat, hadith } from "@prisma/client";
 import { useState } from "react";
 import { ExoCaroussel } from "./exoCaroussel";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -11,11 +11,15 @@ type props = {
   myAyats: ayat[];
   ayatsToLearn: ayat[];
   randomLearnedAyat: ayat[];
+  myHadith: hadith[];
+  randomHadithLearned: hadith[];
 };
 export const ChoixRevision = ({
   ayatsToLearn,
   myAyats,
   randomLearnedAyat,
+  myHadith,
+  randomHadithLearned,
 }: props) => {
   const [ayats, setAyats] = useState<ayat[]>([]);
   return (
