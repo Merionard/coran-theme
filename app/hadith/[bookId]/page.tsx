@@ -13,7 +13,7 @@ export default async function BookPage({
   });
 
   return (
-    <div className="mx-auto w-2/3 ">
+    <div className="mx-auto md:w-2/3 ">
       {chapters.map((c, i) => (
         <Link href={`/hadith/${params.bookId}/${c.id}`} key={c.id}>
           <div
@@ -21,13 +21,13 @@ export default async function BookPage({
               "bg-secondary": i % 2 === 0,
             })}
           >
-            <div className="flex gap-5">
+            <div className="flex gap-2 md:gap-5">
               <p>{i + 1}</p>
               <p>
                 {c.titleFr} ({c.hadiths.length})
               </p>
             </div>
-            <p className="text-3xl">{c.title}</p>
+            <p className="text-xl md:text-3xl">{c.title}</p>
           </div>
         </Link>
       ))}

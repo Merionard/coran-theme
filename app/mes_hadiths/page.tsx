@@ -1,3 +1,4 @@
+import { FavorisHadithPage } from "@/components/clientComponents/favoris/favorisHadithPage";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
@@ -17,16 +18,35 @@ export default async function MesHadiths() {
       </Alert>
     );
   } else {
-    const data = await prisma.user.findUnique({
-      where: { id: session.user.id },
-      include: {
-        myHadiths: {
-          include: { hadithChapter: { include: { hadithBook: true } } },
-        },
-        hadithsLearned: {
-          include: { hadithChapter: { include: { hadithBook: true } } },
-        },
-      },
-    });
+    const data = await getUserData(session.user.id);
+
+    return (
+      <div>
+        <h2 className="text-center text-4xl md:text-6xl mb-5 md:mb-16">
+          Mes Hadiths
+        </h2>
+        <FavorisHadithPage hadithsUser={data} />
+      </div>
+    );
   }
 }
+
+async function getUserData(userId: string) {
+  const data = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      myHadiths: {
+        include: { hadithChapter: { include: { hadithBook: true } } },
+      },
+      hadithsLearned: {
+        include: { hadithChapter: { include: { hadithBook: true } } },
+      },
+    },
+  });
+
+  return data;
+}
+
+export type hadithUser = ReturnType<typeof getUserData> extends Promise<infer R>
+  ? R
+  : never;

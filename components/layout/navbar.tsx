@@ -38,6 +38,11 @@ export const Navbar = () => {
       needSession: true,
     },
     {
+      name: "mes hadiths",
+      url: "/mes_hadiths",
+      needSession: true,
+    },
+    {
       name: "A apprendre",
       url: "/a_apprendre",
       needSession: false,
