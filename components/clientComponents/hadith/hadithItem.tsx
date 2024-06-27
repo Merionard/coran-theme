@@ -83,7 +83,7 @@ export const HadithItem = ({
 
         <div className="flex gap-2">
           <button
-            className="hidden rounded-full md:block mr-8"
+            className="hidden rounded-full  md:mr-5 md:block"
             onClick={toogleLanguage}
           >
             {language === "FR" ? (
@@ -121,6 +121,15 @@ export const HadithItem = ({
             </>
           )}
         </div>
+      </div>
+      <div className="md:hidden flex justify-end">
+        <button className=" rounded-full  " onClick={toogleLanguage}>
+          {language === "FR" ? (
+            <Image src={drapeauFr} alt="drapeaufr" className="w-6 h-6" />
+          ) : (
+            <Image src={drapeauEn} alt="drapeaufr" className="w-6 h-6" />
+          )}
+        </button>
       </div>
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
