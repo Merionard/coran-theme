@@ -24,7 +24,7 @@ export default async function BookPage({
             <div className="flex gap-5">
               <p>{i + 1}</p>
               <p>
-                {c.titleEn} ({c.hadiths.length})
+                {c.titleFr} ({c.hadiths.length})
               </p>
             </div>
             <p className="text-3xl">{c.title}</p>

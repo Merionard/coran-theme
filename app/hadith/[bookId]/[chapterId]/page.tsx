@@ -1,5 +1,8 @@
 import { HadithItem } from "@/components/clientComponents/hadith/hadithItem";
+import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/prisma/client";
+import { hadith } from "@prisma/client";
+import { getServerSession } from "next-auth";
 
 export default async function ChapterPage({
   params,
@@ -11,6 +14,29 @@ export default async function ChapterPage({
     include: { hadithChapter: { include: { hadithBook: true } } },
   });
 
+  const session = await getAuthSession();
+  let userData = null;
+  if (session) {
+    userData = await prisma.user.findUnique({
+      where: { id: session?.user.id },
+      include: { myHadiths: true, hadithsLearned: true },
+    });
+  }
+
+  const isHadithFavorite = (hadith: hadith) => {
+    if (!userData) {
+      return false;
+    }
+    return userData.myHadiths.some((h) => h.id === hadith.id);
+  };
+
+  const isHadithLearned = (hadith: hadith) => {
+    if (!userData) {
+      return false;
+    }
+    return userData.hadithsLearned.some((h) => h.id === hadith.id);
+  };
+
   return (
     <div className="space-y-3">
       <h2 className="text-center text-4xl  md:text-6xl ">
@@ -19,15 +45,13 @@ export default async function ChapterPage({
       {hadiths.map((a) => (
         <HadithItem
           hadith={a}
-          isFavorite={true}
+          isFavorite={isHadithFavorite(a)}
           key={a.id}
-          isLearned={true}
+          isLearned={isHadithLearned(a)}
           metadata={{
             bookId: hadiths[0].hadithChapter.hadith_book_id,
             bookName: hadiths[0].hadithChapter.hadithBook.titleTraductionEn,
-            chapterId: hadiths[0].hadith_chapter,
             chapterName: hadiths[0].hadithChapter.titleEn,
-            chapterNumber: 5,
           }}
         />
       ))}

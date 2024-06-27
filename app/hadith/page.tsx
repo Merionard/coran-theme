@@ -65,7 +65,7 @@ export default async function ThemesHadithsPage() {
           ))}
         </div>
       </div>
-      <hr className="w-1/3 h-1 mx-auto  bg-gray-100  border-0 rounded  " />
+      <hr className="mx-auto w-1/2 border-primary" />
       <div>
         <h2 className="text-left text-2xl md:text-4xl mb-5">Les 40</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
@@ -75,7 +75,7 @@ export default async function ThemesHadithsPage() {
                 <CardHeader>
                   <CardTitle className="text-right space-y-2">
                     <p>{b.title}</p>
-                    <p>{b.titleTraductionEn}</p>
+                    <p>{b.titleTraductionFr}</p>
                   </CardTitle>
                   <CardDescription className="text-2xl text-right">
                     {b.author}
@@ -86,7 +86,7 @@ export default async function ThemesHadithsPage() {
           ))}
         </div>
       </div>
-      <hr className="mx-auto w-1/2" />
+      <hr className="mx-auto w-1/2 border-primary" />
       <div>
         <h2 className="text-left text-2xl md:text-4xl mb-5">Autes ouvrages</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 ">
